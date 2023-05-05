@@ -15,8 +15,8 @@ public:
 	Sequence(T* items, size_t length) {}
 	Sequence(const Sequence<T>& other) = default;
 	~Sequence() = default;
-	virtual Sequence<T>* create() = 0;
-	virtual Sequence<T>* copy() = 0;
+	virtual Sequence<T>* create() const = 0;
+	virtual Sequence<T>* copy() const = 0;
 
 	virtual size_t get_length() const override = 0;
 
@@ -34,8 +34,13 @@ public:
 	virtual void prepend(T item) = 0;
 	virtual void insert_at(T item, int index) = 0;
 
-	virtual Sequence <T>* concat(const Sequence <T>* const otherSequence) const = 0;
-
+	Sequence <T>* concat(Sequence <T>* otherSequence) const {
+		Sequence<T>* concated = this->copy();
+		for (IIterator<T>* it = otherSequence->Ibegin(); !(it->is_equel(otherSequence->Iend())); it->next()) {
+			concated->append(it->get());
+		}
+		return concated;
+	}
 	Sequence<T>* map(T(*f)(T&)) {
         Sequence<T>* result = this->create();
         for (int i = 0; i < this->get_length(); ++i) {

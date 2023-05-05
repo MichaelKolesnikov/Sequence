@@ -96,10 +96,10 @@ public:
 	ArraySequence(const ArraySequence<T>& other) : Sequence<T>(other) {
 		this->dynamicArray = new DynamicArray<T>(*other.dynamicArray);
 	}
-	Sequence<T>* create() {
+	Sequence<T>* create() const {
 		return new ArraySequence<T>();
 	}
-	Sequence<T>* copy() {
+	Sequence<T>* copy() const {
 		return new ArraySequence<T>(*(this->dynamicArray));
 	}
 
@@ -145,16 +145,5 @@ public:
 			(*(this->dynamicArray))[i] = this->dynamicArray->get(i - 1);
 		}
 		(*(this->dynamicArray))[index] = item;
-	}
-
-	Sequence <T>* concat(const Sequence <T>* const otherSequence) const override {
-		DynamicArray<T>* concatArr = new DynamicArray<T>(this->get_length() + otherSequence->get_length());
-		for (int i = 0; i < this->get_length(); ++i) {
-			(*(concatArr))[i] = this->get(i);
-		}
-		for (int i = this->get_length(); i < concatArr->get_length(); ++i) {
-			(*(concatArr))[i] = otherSequence->get(i - this->get_length());
-		}
-		return new ArraySequence<T>(*concatArr);
 	}
 };

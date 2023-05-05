@@ -102,7 +102,6 @@ public:
 		memcpy(this->data, items, size * sizeof(T));
 	}
 	DynamicArray(const DynamicArray<T>& dynamic_array) {
-		delete[] this->data;
 		this->length = dynamic_array.get_length();
 		this->data = new T[this->length];
 		memcpy(this->data, dynamic_array.data, length * sizeof(T));

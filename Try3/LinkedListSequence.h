@@ -99,10 +99,10 @@ public:
 	LinkedListSequence(const LinkedListSequence<T>& other) : Sequence<T>(other) {
 		this->linked_list = new LinkedList<T>(*other.linked_list);
 	}
-	Sequence<T>* create() {
+	Sequence<T>* create() const {
 		return new LinkedListSequence<T>();
 	}
-	Sequence<T>* copy() {
+	Sequence<T>* copy() const {
 		return new LinkedListSequence<T>(*this);
 	}
 
@@ -142,16 +142,5 @@ public:
 	}
 	void insert_at(T item, int index) override {
 		this->linked_list->insert_at(item, index);
-	}
-
-	Sequence <T>* concat(const Sequence <T>* const sequence) const override {
-		LinkedList<T>* con = new LinkedList<T>();
-		for (size_t i = 0; i < this->get_length(); ++i) {
-			con->append(this->get(i));
-		}
-		for (size_t i = 0; i < sequence->get_length(); ++i) {
-			con->append(sequence->get(i));
-		}
-		return new LinkedListSequence<T>(*con);
 	}
 };
