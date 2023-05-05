@@ -21,4 +21,7 @@ int main() {
 	Sequence<int>* seq2 = new ArraySequence<int>(data2, length2);
 	Sequence<int>* concat = seq1->concat(seq2);
 	cout << concat;
+
+	Sequence<double>* mapped = map<double, LinkedListSequence<double>, int>([](int x) {return (double)x / 2;}, seq1);
+	cout << mapped;
 }

@@ -2,6 +2,8 @@
 #include "..\Try3\ArraySequence.h"
 #include "..\Try3\LinkedListSequence.h"
 
+using namespace std;
+
 TEST(TestCaseName, TestName) {
 	Sequence<float>* nothing1 = new ArraySequence<float>(0);
 	Sequence<float>* nothing2 = new LinkedListSequence<float>(0);
@@ -35,4 +37,5 @@ TEST(TestCaseName, TestName) {
 			i = 0;
 		}
 	}
+	// Sequence<double>* mapped = map<double, LinkedListSequence<double>, int>([](int x) {return (double)x / 2;}, sequence1);
 }

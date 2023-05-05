@@ -41,13 +41,7 @@ public:
 		}
 		return concated;
 	}
-	Sequence<T>* map(T(*f)(T&)) {
-        Sequence<T>* result = this->create();
-        for (int i = 0; i < this->get_length(); ++i) {
-            result->append(f(this->get(i)));
-        }
-        return result;
-    }
+
 	Sequence<T>* where(bool (*f)(T&)) {
         Sequence<T>* result = this->create();
         for (int i = 0; i < this->get_length(); ++i) {
@@ -76,3 +70,13 @@ public:
 		return stream;
 	}
 };
+
+template <class output_type, class sequence_output_type, class input_type>
+typename std::enable_if<std::is_base_of<Sequence<output_type>, sequence_output_type>::value, Sequence<output_type>*>::type
+map(output_type(*f)(input_type), Sequence<input_type>* sequence) {
+	Sequence<output_type>* result = new sequence_output_type();
+	for (IIterator<input_type>* it = sequence->Ibegin(); !(it->is_equel(sequence->Iend())); it->next()) {
+		result->append(f(it->get()));
+	}
+	return result;
+}
