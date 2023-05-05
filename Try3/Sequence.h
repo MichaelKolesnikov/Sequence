@@ -61,11 +61,13 @@ public:
     }
 
 	friend std::ostream& operator<< (std::ostream& stream, Sequence<T>* sequence) {
-		stream << std::endl << sequence->get_length() << std::endl;
-		for (IIterator<T>* it = sequence->Ibegin(); !(it->is_equel(sequence->Iend())); it->next()) {
+		stream << std::endl << "[";
+		IIterator<T>* it = sequence->Ibegin();
+		for (; !(it->is_equel(sequence->Iend())); it->next()) {
 			stream << it->get() << " ";
 		}
-		stream << std::endl;
+		stream << "]" << std::endl;
+		delete it;
 		return stream;
 	}
 };

@@ -145,7 +145,7 @@ public:
 		stream << std::endl;
 		stream << dynamic_array.get_length() << std::endl;
         for (auto it = dynamic_array.cbegin(); it != dynamic_array.cend(); ++it) {
-            cout << it.get() << " ";
+            stream << it.get() << " ";
         }
 		stream << std::endl;
         return stream;

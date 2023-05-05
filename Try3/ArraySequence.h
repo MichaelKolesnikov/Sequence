@@ -60,11 +60,11 @@ public:
 		}
 
 		T get() const override {
-			return *(this->pointer);
+			return this->collection->get(this->index);
 		}
 
 		T& operator* () {
-			return *(this->pointer);
+			return this->collection->operator[](this->index);
 		}
 	};
 
