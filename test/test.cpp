@@ -21,10 +21,13 @@ TEST(TestCaseName, TestName) {
 	for (IIterator<int>* it1 = sequence1->Ibegin(), *it2 = sequence2->Ibegin(); 
 		!(it1->is_equel(sequence1->Iend())) && !(it2->is_equel(sequence2->Iend())); 
 	it1->next(), it2->next()) {
+		auto val = it1->get();
 		EXPECT_EQ(it1->get(), it2->get());
 		it1->operator*() = 505;
 		it2->operator*() = 505;
 		EXPECT_EQ(it1->get(), it2->get());
+		it1->operator*() = val;
+		it2->operator*() = val;
 	}
 	Sequence<int>* concated = sequence1->concat(sequence2);
 	int i = 0;
@@ -37,5 +40,25 @@ TEST(TestCaseName, TestName) {
 			i = 0;
 		}
 	}
-	// Sequence<double>* mapped = map<double, LinkedListSequence<double>, int>([](int x) {return (double)x / 2;}, sequence1);
+	Sequence<double>* mapped = map_sequence<double, ArraySequence<double>, int>([](int x) {return (double)x / 2;}, sequence1);
+	auto it = mapped->Ibegin();
+	for (auto it1 = sequence1->Ibegin(); !(it->is_equel(mapped->Iend())); it->next(), it1->next()) {
+		EXPECT_EQ(it->get(), (double)it1->get() / 2);
+	}
+	auto f = [](int x) {return x % 2 == 0;};
+	Sequence<int>* whered = sequence1->where(f);
+	for (IIterator<int>* it = sequence1->Ibegin(), *it1 = whered->Ibegin(); !(it->is_equel(sequence1->Iend())) && !(whered->Iend()); it->next()) {
+		if (f(it->get())) {
+			if (f(it->get())) {
+				EXPECT_EQ(it->get(), it1->get());
+				if (it->get() != it1->get()) {
+					break;
+				}
+				it1->next();
+			}
+		}
+	}
+	auto val = sequence1->reduce([](int x, int y) {return x + y;}, 100);
+	cout << val;
+
 }

@@ -42,20 +42,21 @@ public:
 		return concated;
 	}
 
-	Sequence<T>* where(bool (*f)(T&)) {
+	Sequence<T>* where(bool (*f)(T)) {
         Sequence<T>* result = this->create();
-        for (int i = 0; i < this->get_length(); ++i) {
-            if (f(this->get(i))) {
-                result->append(this->get(i));
+        for (IIterator<T>* it = this->Ibegin(); !(it->is_equel(this->Iend())); it->next()) {
+            if (f(it->get())) {
+				result->append(it->get());
             }    
         }
         return result;
     }
+
     T reduce(T(*f)(T, T), T base) {
-        for (int i = this->get_length() - 1; i > 0; --i) {
-            base = f(this->get(i), base);
+		for (IIterator<T>* it = this->Iend(); !(it->is_equel(this->Ibegin()));) {
+			it->prev();
+            base = f(it->get(), base);
         }
-        base = f(this->get_first(), base);
         return base;
     }
 
@@ -73,7 +74,7 @@ public:
 
 template <class output_type, class sequence_output_type, class input_type>
 typename std::enable_if<std::is_base_of<Sequence<output_type>, sequence_output_type>::value, Sequence<output_type>*>::type
-map(output_type(*f)(input_type), Sequence<input_type>* sequence) {
+map_sequence(output_type(*f)(input_type), Sequence<input_type>* sequence) {
 	Sequence<output_type>* result = new sequence_output_type();
 	for (IIterator<input_type>* it = sequence->Ibegin(); !(it->is_equel(sequence->Iend())); it->next()) {
 		result->append(f(it->get()));
