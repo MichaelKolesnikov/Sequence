@@ -14,7 +14,7 @@ private:
 	T* data;
 public:
     class ConstIterator {
-    private:
+    protected:
         T* current;
     public:
         ConstIterator() : current(nullptr) {}
@@ -64,7 +64,7 @@ public:
             return *(current);
         }
     };
-    class Iterator : ConstIterator {
+    class Iterator : public ConstIterator {
     public:
         Iterator(T* data): ConstIterator(data) {}
 

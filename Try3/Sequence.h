@@ -28,7 +28,18 @@ public:
 	virtual T get_first() const = 0;
 	virtual T get_last() const = 0;
 
-	virtual Sequence<T>* get_sub_sequence(int startIndex, int endIndex) const = 0;
+	Sequence<T>* get_sub_sequence(int startIndex, int endIndex) {
+		Sequence<T>* sub = this->create();
+		IIterator<T>* it = this->Ibegin();
+		int i = 0;
+		for (; i < startIndex; ++i) {
+			it->next();
+		}
+		for (; i < endIndex; ++i, it->next()) {
+			sub->append(it->get());
+		}
+		return sub;
+	}
 
 	virtual void append(T item) = 0;
 	virtual void prepend(T item) = 0;
@@ -42,7 +53,7 @@ public:
 		return concated;
 	}
 
-	Sequence<T>* where(bool (*f)(T)) {
+	Sequence<T>* find(bool (*f)(T)) {
         Sequence<T>* result = this->create();
         for (IIterator<T>* it = this->Ibegin(); !(it->is_equel(this->Iend())); it->next()) {
             if (f(it->get())) {

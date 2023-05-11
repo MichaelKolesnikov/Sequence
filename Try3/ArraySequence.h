@@ -96,6 +96,14 @@ public:
 	ArraySequence(const ArraySequence<T>& other) : Sequence<T>(other) {
 		this->dynamicArray = new DynamicArray<T>(*other.dynamicArray);
 	}
+	ArraySequence(Sequence<T>* sequence) {
+		this->dynamicArray = new DynamicArray<T>(sequence->get_length());
+		IIterator<T>* it = sequence->Ibegin();
+		for (auto it_ = this->dynamicArray->begin(); it_ != this->dynamicArray->end(); ++it_) {
+			*it_ = it->get();
+			it->next();
+		}
+	}
 	Sequence<T>* create() const {
 		return new ArraySequence<T>();
 	}
@@ -120,14 +128,14 @@ public:
 		return this->dynamicArray->try_get(index);
 	}
 
-	Sequence<T>* get_sub_sequence(int startIndex, int endIndex) const override {
+	/*Sequence<T>* get_sub_sequence(int startIndex, int endIndex) const override {
 		DynamicArray<T>* d = new DynamicArray<T>(endIndex - startIndex);
 		for (int i = startIndex, j = 0; i < endIndex; ++i, ++j) {
 			(*d)[j] = (*(this->dynamicArray))[i];
 		}
 		Sequence<T>* res = new ArraySequence<T>(*d);
 		return res;
-	}
+	}*/
 
 	size_t get_length() const override {
 		return this->dynamicArray->get_length();

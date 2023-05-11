@@ -99,6 +99,14 @@ public:
 	LinkedListSequence(const LinkedListSequence<T>& other) : Sequence<T>(other) {
 		this->linked_list = new LinkedList<T>(*other.linked_list);
 	}
+	LinkedListSequence(Sequence<T>* sequence) {
+		this->linked_list = new LinkedList<T>(sequence->get_length());
+		IIterator<T>* it = sequence->Ibegin();
+		for (auto it_ = this->linked_list->begin(); it_ != this->linked_list->end(); ++it_) {
+			*it_ = it->get();
+			it->next();
+		}
+	}
 	Sequence<T>* create() const {
 		return new LinkedListSequence<T>();
 	}
@@ -123,12 +131,12 @@ public:
 		return this->linked_list->try_get(index);
 	}
 
-	Sequence<T>* get_sub_sequence(int startIndex, int endIndex) const override {
+	/*Sequence<T>* get_sub_sequence(int startIndex, int endIndex) const override {
 		LinkedList<T>* subList = this->linked_list->get_sub_list(startIndex, endIndex);
 		Sequence<T>* seq = new LinkedListSequence<T>(*subList);
 		delete subList;
 		return seq;
-	}
+	}*/
 
 	size_t get_length() const override {
 		return this->linked_list->get_length();
