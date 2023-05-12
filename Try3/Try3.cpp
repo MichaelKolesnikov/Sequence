@@ -5,7 +5,7 @@
 using namespace std;
 
 template <class T>
-void process_sequence(Sequence<T>* sequence, bool(*f_find)(T x), T(f_reduce)(T a, T b)) {
+void process_sequence(Sequence<T>* sequence, bool(*f_find)(T x), T(*f_reduce)(T a, T b), T(*f_map)(T x)) {
 	cout << "Select the operation to be performed on the sequence" << endl;
 	cout << "1: get_length" << endl;
 	cout << "2: get item" << endl;
@@ -18,6 +18,7 @@ void process_sequence(Sequence<T>* sequence, bool(*f_find)(T x), T(f_reduce)(T a
 	cout << "9: reduce" << endl;
 	cout << "10: EXIT" << endl;
 	cout << "11: print" << endl;
+	cout << "12: map" << endl;
 	
 	bool working = true;
 	while (working) {
@@ -137,6 +138,20 @@ void process_sequence(Sequence<T>* sequence, bool(*f_find)(T x), T(f_reduce)(T a
 		else if (operation == "11") {
 			cout << sequence;
 		}
+		else if (operation == "12") {
+		Sequence<T>* mapped = map_sequence<T, ArraySequence<T>, T>(f_map, sequence);
+		cout << mapped;
+		cout << "Do you want to keep this version? (then the old one will be lost) y/n" << endl;
+		string choice;
+		cin >> choice;
+		if (choice == "y") {
+			delete sequence;
+			sequence = mapped;
+		}
+		else {
+			delete mapped;
+		}
+		}
 		else {
 			cout << "You entered an unknown operation" << endl;
 		}
@@ -171,6 +186,20 @@ T f_reduce(T a, T b) {
 	return T();
 }
 
+template <class T>
+T f_map(T x) {
+	if (typeid(x) == typeid(5)) {
+		return x * 5;
+	}
+	if (typeid(x) == typeid(5.5)) {
+		return x * 10;
+	}
+	if (typeid(x) == typeid('a')) {
+		return (char)(x + 'a');
+	}
+	return T();
+}
+
 int main() {
 	bool working = true;
 	while (working) {
@@ -185,17 +214,17 @@ int main() {
 		{
 		case '1': {
 			Sequence<int>* sequence = new ArraySequence<int>();
-			process_sequence(sequence, f_find, f_reduce);
+			process_sequence(sequence, f_find, f_reduce, f_map);
 			break;
 		}
 		case '2': {
 			Sequence<double>* sequence = new ArraySequence<double>();
-			process_sequence(sequence, f_find, f_reduce);
+			process_sequence(sequence, f_find, f_reduce, f_map);
 			break;
 		}
 		case '3': {
 			Sequence<char>* sequence = new ArraySequence<char>();
-			process_sequence(sequence, f_find, f_reduce);
+			process_sequence(sequence, f_find, f_reduce, f_map);
 			break;
 		}
 		case '9': {
