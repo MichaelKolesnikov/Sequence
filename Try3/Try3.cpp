@@ -1,10 +1,11 @@
 ﻿#include "ArraySequence.h"
 #include "LinkedListSequence.h"
+#include <typeinfo>
 
 using namespace std;
 
 template <class T>
-void process_sequence(Sequence<T>* sequence) {
+void process_sequence(Sequence<T>* sequence, bool(*f_find)(T x), T(f_reduce)(T a, T b)) {
 	cout << "Select the operation to be performed on the sequence" << endl;
 	cout << "1: get_length" << endl;
 	cout << "2: get item" << endl;
@@ -17,7 +18,7 @@ void process_sequence(Sequence<T>* sequence) {
 	cout << "9: reduce" << endl;
 	cout << "10: EXIT" << endl;
 	cout << "11: print" << endl;
-
+	
 	bool working = true;
 	while (working) {
 		string operation;
@@ -46,6 +47,7 @@ void process_sequence(Sequence<T>* sequence) {
 				continue;
 			}
 			Sequence<T>* sub = sequence->get_sub_sequence(l, r);
+			cout << sub;
 			cout << "Do you want to keep the cropped version? (then the old one will be lost) y/n" << endl;
 			string choice;
 			cin >> choice;
@@ -82,8 +84,54 @@ void process_sequence(Sequence<T>* sequence) {
 			cin >> value;
 			sequence->insert_at(value, index);
 		}
+		else if (operation == "7") {
+			int n;
+			cout << "Enter the length of the collection to be added" << endl;
+			if (!(cin >> n)) {
+				cin.clear();
+				cin.ignore(numeric_limits<std::streamsize>::max(), '\n');
+				cout << "wrong input format" << endl;
+				continue;
+			}
+			T* data = new T[n];
+			cout << "Enter the elements of the sequence to be added" << endl;
+			for (int i = 0; i < n; ++i) {
+				if (!(cin >> data[i])) {
+					cin.clear();
+					cin.ignore(numeric_limits<std::streamsize>::max(), '\n');
+					cout << "wrong input format" << endl;
+					break;
+				}
+			}
+			Sequence<T>* added = new ArraySequence<T>(data, n);
+			Sequence<T>* concated = sequence->concat(added);
+			delete sequence;
+			delete added;
+			sequence = concated;
+		}
+		else if (operation == "8") {
+			Sequence<T>* whered = sequence->find(f_find);
+			cout << whered;
+			cout << "Do you want to keep the cropped version? (then the old one will be lost) y/n" << endl;
+			string choice;
+			cin >> choice;
+			if (choice == "y") {
+				delete sequence;
+				sequence = whered;
+			}
+			else {
+				delete whered;
+			}
+		}
+		else if (operation == "9") {
+			T value;
+			cout << "Enter base value" << endl;
+			cin >> value;
+			cout << sequence->reduce(f_reduce, value) << endl;
+		}
 		else if (operation == "10") {
-			cout << "Good bye!" << endl;
+			delete sequence;
+			cout << "You have finished the session.\nYou can start a new one" << endl;
 			working = false;
 		}
 		else if (operation == "11") {
@@ -95,33 +143,72 @@ void process_sequence(Sequence<T>* sequence) {
 	}
 }
 
-int main() {
-	string type;
-	cout << "Select the type of data to be stored" << endl;
-	cout << "1: int, "
-		<< "2: double, "
-		<< "3: char, " << endl;
+template <class T>
+bool f_find(T x) {
+	if (typeid(x) == typeid(5)) {
+		return x > 5;
+	}
+	if (typeid(x) == typeid(5.5)) {
+		return x > 5;
+	}
+	if (typeid(x) == typeid('a')) {
+		return 'a' <= x && x <= 'z';
+	}
+	return 0;
+}
 
-	cin >> type;
-	switch (type[0])
-	{
-	case '1': {
-		Sequence<int>* sequence = new ArraySequence<int>();
-		process_sequence(sequence);
-		break;
+template <class T>
+T f_reduce(T a, T b) {
+	if (typeid(a) == typeid(5)) {
+		return a + b;
 	}
-	case '2': {
-		Sequence<double>* sequence = new ArraySequence<double>();
-		process_sequence(sequence);
-		break;
+	if (typeid(a) == typeid(5.5)) {
+		return a + b;
 	}
-	case '3': {
-		Sequence<char>* sequence = new ArraySequence<char>();
-		process_sequence(sequence);
-		break;
+	if (typeid(a) == typeid('a')) {
+		return (char)(a / 2 + b / 2);
 	}
-	default:
-		break;
+	return T();
+}
+
+int main() {
+	bool working = true;
+	while (working) {
+		string type;
+		cout << "Select the type of data to be stored" << endl;
+		cout << "1: int, "
+			<< "2: double, "
+			<< "3: char, "
+			<< "9: EXIT" << endl;
+		cin >> type;
+		switch (type[0])
+		{
+		case '1': {
+			Sequence<int>* sequence = new ArraySequence<int>();
+			process_sequence(sequence, f_find, f_reduce);
+			break;
+		}
+		case '2': {
+			Sequence<double>* sequence = new ArraySequence<double>();
+			process_sequence(sequence, f_find, f_reduce);
+			break;
+		}
+		case '3': {
+			Sequence<char>* sequence = new ArraySequence<char>();
+			process_sequence(sequence, f_find, f_reduce);
+			break;
+		}
+		case '9': {
+			working = false;
+			cout << "Good bye!" << endl;
+			break;
+		}
+		default: {
+			cout << "You entered the wrong type" << endl;
+			break;
+		}
+		}
 	}
+	
 
 }
