@@ -30,9 +30,9 @@ public:
 	virtual T get_first() const = 0;
 	virtual T get_last() const = 0;
 
-	Sequence<T>* get_sub_sequence(int startIndex, int endIndex) {
+	Sequence<T>* get_sub_sequence(int startIndex, int endIndex) const {
 		Sequence<T>* sub = this->create();
-		IIterator<T>* it = this->Ibegin();
+		IConstIterator<T>* it = this->Icbegin();
 		int i = 0;
 		for (; i < startIndex; ++i) {
 			it->next();
@@ -47,17 +47,17 @@ public:
 	virtual void prepend(T item) = 0;
 	virtual void insert_at(T item, int index) = 0;
 
-	Sequence <T>* concat(Sequence <T>* otherSequence) const {
+	Sequence <T>* concat(const Sequence <T>* const otherSequence) const {
 		Sequence<T>* concated = this->copy();
-		for (IIterator<T>* it = otherSequence->Ibegin(); !(it->is_equel(otherSequence->Iend())); it->next()) {
+		for (IConstIterator<T>* it = otherSequence->Icbegin(); !(it->is_equel(otherSequence->Icend())); it->next()) {
 			concated->append(it->get());
 		}
 		return concated;
 	}
 
-	Sequence<T>* find(bool (*f)(T)) {
+	Sequence<T>* find(bool (*f)(T)) const {
         Sequence<T>* result = this->create();
-        for (IIterator<T>* it = this->Ibegin(); !(it->is_equel(this->Iend())); it->next()) {
+        for (IConstIterator<T>* it = this->Icbegin(); !(it->is_equel(this->Icend())); it->next()) {
             if (f(it->get())) {
 				result->append(it->get());
             }    
@@ -65,18 +65,18 @@ public:
         return result;
     }
 
-    T reduce(T(*f)(T, T), T base) {
-		for (IIterator<T>* it = this->Iend(); !(it->is_equel(this->Ibegin()));) {
+    T reduce(T(*f)(T, T), T base) const {
+		for (IConstIterator<T>* it = this->Icend(); !(it->is_equel(this->Icbegin()));) {
 			it->prev();
             base = f(it->get(), base);
         }
         return base;
     }
 
-	friend std::ostream& operator<< (std::ostream& stream, Sequence<T>* sequence) {
+	friend std::ostream& operator<< (std::ostream& stream, const Sequence<T>* const sequence) {
 		stream << std::endl << "[";
-		IIterator<T>* it = sequence->Ibegin();
-		for (; !(it->is_equel(sequence->Iend())); it->next()) {
+		IConstIterator<T>* it = sequence->Icbegin();
+		for (; !(it->is_equel(sequence->Icend())); it->next()) {
 			stream << it->get() << " ";
 		}
 		stream << "]" << std::endl;
@@ -87,9 +87,9 @@ public:
 
 template <class output_type, class sequence_output_type, class input_type>
 typename std::enable_if<std::is_base_of<Sequence<output_type>, sequence_output_type>::value, Sequence<output_type>*>::type
-map_sequence(output_type(*f)(input_type), Sequence<input_type>* sequence) {
+map_sequence(output_type(*f)(input_type), const Sequence<input_type>* const sequence) {
 	Sequence<output_type>* result = new sequence_output_type();
-	for (IIterator<input_type>* it = sequence->Ibegin(); !(it->is_equel(sequence->Iend())); it->next()) {
+	for (IConstIterator<input_type>* it = sequence->Icbegin(); !(it->is_equel(sequence->Icend())); it->next()) {
 		result->append(f(it->get()));
 	}
 	return result;
