@@ -200,7 +200,7 @@ T f_map(T x) {
 	return T();
 }
 
-int main() {
+void call_interface() {
 	bool working = true;
 	while (working) {
 		string type;
@@ -238,6 +238,8 @@ int main() {
 		}
 		}
 	}
-	
+}
 
+int main() {
+	
 }

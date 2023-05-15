@@ -10,53 +10,50 @@ using namespace std;
 template<class T>
 class DynamicArray : ICollection<T> {
 private:
-	size_t length;
-	T* data;
-public:
-    class ConstIterator {
+    class BaseIterator {
     protected:
         T* current;
     public:
-        ConstIterator() : current(nullptr) {}
-        ConstIterator(T* data) : current(data) {}
+        BaseIterator() : current(nullptr) {}
+        BaseIterator(T* data) : current(data) {}
 
-        ConstIterator(const DynamicArray<T>& other) : current(other.data) {}
+        BaseIterator(const DynamicArray<T>& other) : current(other.data) {}
 
-        ConstIterator operator+ (int n) {
-            return ConstIterator(current + n);
+        BaseIterator operator+ (int n) {
+            return BaseIterator(current + n);
         }
 
-        ConstIterator operator- (int n) {
-            return ConstIterator(current - n);
+        BaseIterator operator- (int n) {
+            return BaseIterator(current - n);
         }
 
-        ConstIterator& operator++ () {
+        BaseIterator& operator++ () {
             current++;
             return *this;
         }
 
-        ConstIterator operator++ (int) {
+        BaseIterator operator++ (int) {
             Iterator iter = *this;
             ++(*this);
             return iter;
         }
 
-        ConstIterator& operator-- () {
+        BaseIterator& operator-- () {
             current--;
             return *this;
         }
 
-        ConstIterator operator-- (int) {
-            ConstIterator iter = *this;
+        BaseIterator operator-- (int) {
+            BaseIterator iter = *this;
             --(*this);
             return iter;
         }
 
-        bool operator== (const ConstIterator& other) const {
+        bool operator== (const BaseIterator& other) const {
             return this->current == other.current;
         }
 
-        bool operator!= (const ConstIterator& other) const {
+        bool operator!= (const BaseIterator& other) const {
             return !(this->operator==(other));
         }
 
@@ -64,11 +61,20 @@ public:
             return *(current);
         }
     };
-    class Iterator : public ConstIterator {
+	size_t length;
+	T* data;
+public:
+    class ConstIterator : public BaseIterator {
     public:
-        Iterator(T* data): ConstIterator(data) {}
-
-        Iterator(const DynamicArray<T>& other) : ConstIterator(other) {}
+        ConstIterator() : BaseIterator() {}
+        ConstIterator(T* data) : BaseIterator(data) {};
+        ConstIterator(const DynamicArray<T>& other) : BaseIterator(other) {}
+    };
+    class Iterator : public BaseIterator {
+    public:
+        Iterator() : BaseIterator() {}
+        Iterator(T* data) : BaseIterator(data) {};
+        Iterator(const DynamicArray<T>& other) : BaseIterator(other) {}
 
         T& operator* () { 
             return *(this->current); 

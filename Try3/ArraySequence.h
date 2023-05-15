@@ -104,10 +104,10 @@ public:
 			it->next();
 		}
 	}
-	Sequence<T>* create() const {
+	Sequence<T>* create() const override {
 		return new ArraySequence<T>();
 	}
-	Sequence<T>* copy() const {
+	Sequence<T>* copy() const override {
 		return new ArraySequence<T>(*(this->dynamicArray));
 	}
 

@@ -139,30 +139,38 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Algorithms.cpp" />
     <ClCompile Include="ArraySequence.cpp" />
     <ClCompile Include="DynamicArray.cpp" />
+    <ClCompile Include="Educator.cpp" />
     <ClCompile Include="ICollection.cpp" />
     <ClCompile Include="IIterator.cpp" />
     <ClCompile Include="IndexOutOfRange.cpp" />
     <ClCompile Include="LinkedList.cpp" />
     <ClCompile Include="LinkedListSequence.cpp" />
+    <ClCompile Include="Matrix.cpp" />
     <ClCompile Include="Option.cpp" />
+    <ClCompile Include="Person.cpp" />
     <ClCompile Include="Sequence.cpp" />
+    <ClCompile Include="Student.cpp" />
     <ClCompile Include="Try3.cpp" />
+    <ClCompile Include="Vector.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Algorithms.h" />
     <ClInclude Include="ArraySequence.h" />
     <ClInclude Include="DynamicArray.h" />
+    <ClInclude Include="Educator.h" />
     <ClInclude Include="ICollection.h" />
     <ClInclude Include="IIterator.h" />
     <ClInclude Include="IndexOutOfRange.h" />
     <ClInclude Include="LinkedList.h" />
     <ClInclude Include="LinkedListSequence.h" />
+    <ClInclude Include="Matrix.h" />
     <ClInclude Include="Option.h" />
+    <ClInclude Include="Person.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Sequence.h" />
+    <ClInclude Include="Student.h" />
+    <ClInclude Include="Vector.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Try3.rc" />

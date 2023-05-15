@@ -29,21 +29,17 @@ public:
 template <class T>
 class LinkedList : ICollection<T> {
 private:
-	size_t length;
-	NodeList<T>* head;
-	NodeList<T>* tail;
-public:
-	class ConstIterator {
+	class BaseIterator {
 	protected:
 		NodeList<T>* current;
 	public:
-		ConstIterator() : current(nullptr) {}
+		BaseIterator() : current(nullptr) {}
 
-		ConstIterator(LinkedList<T> list) : current(list.head) {}
+		BaseIterator(LinkedList<T> list) : current(list.head) {}
 
-		ConstIterator(NodeList<T>* first) : current(first) {}
+		BaseIterator(NodeList<T>* first) : current(first) {}
 
-		ConstIterator operator+ (int n) {
+		BaseIterator operator+ (int n) {
 			size_t counter = 0;
 			while (counter != n) {
 				current = this->current->next;
@@ -52,7 +48,7 @@ public:
 			return *this;
 		}
 
-		ConstIterator operator- (int n) {
+		BaseIterator operator- (int n) {
 			size_t counter = 0;
 			while (counter != n) {
 				this->current = this->current->prev;
@@ -61,30 +57,38 @@ public:
 			return *this;
 		}
 
-		ConstIterator operator++ (int) { current = current->next; return *this; }
-		ConstIterator operator-- (int) { current = current->prev; return *this; }
-		ConstIterator operator++ () { current = current->next; return *this; }
-		ConstIterator operator-- () { current = current->prev; return *this; }
+		BaseIterator operator++ (int) { current = current->next; return *this; }
+		BaseIterator operator-- (int) { current = current->prev; return *this; }
+		BaseIterator operator++ () { current = current->next; return *this; }
+		BaseIterator operator-- () { current = current->prev; return *this; }
 
-		bool operator!= (const ConstIterator& other) const { return this->current != other.current; }
-		bool operator== (const ConstIterator& other) const { return this->current == other.current; }
+		bool operator!= (const BaseIterator& other) const { return this->current != other.current; }
+		bool operator== (const BaseIterator& other) const { return this->current == other.current; }
 
 		T get() const { return this->current->value; }
 	};
-	class Iterator: public ConstIterator {
+	size_t length;
+	NodeList<T>* head;
+	NodeList<T>* tail;
+public:
+	class ConstIterator : public BaseIterator {
 	public:
-		Iterator(): ConstIterator() {}
-
-		Iterator(LinkedList<T> list): ConstIterator(list) {}
-
-		Iterator(NodeList<T>* first): ConstIterator(first) {}
+		ConstIterator() : BaseIterator() {}
+		ConstIterator(LinkedList<T> list) : BaseIterator(list) {}
+		ConstIterator(NodeList<T>* first) : BaseIterator(first) {}
+	};
+	class Iterator: public BaseIterator {
+	public:
+		Iterator(): BaseIterator() {}
+		Iterator(LinkedList<T> list): BaseIterator(list) {}
+		Iterator(NodeList<T>* first): BaseIterator(first) {}
 
 		T& operator* () { return this->current->value; }
 	};
 	ConstIterator cbegin() const { return ConstIterator(this->head); }
-	ConstIterator cend() const { return nullptr; }
+	ConstIterator cend() const { return ConstIterator(this->tail->next); }
 	Iterator begin() noexcept { return Iterator(this->head); }
-	Iterator end() noexcept { return nullptr; }
+	Iterator end() noexcept { return Iterator(this->tail->next); }
 
 	LinkedList() {
 		this->head = nullptr;
