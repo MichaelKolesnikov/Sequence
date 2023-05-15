@@ -8,44 +8,113 @@ class ArraySequence : public Sequence<T> {
 private:
 	DynamicArray<T>* dynamicArray;
 public:
-	class Iterator : public IIterator<T> {
+	class ConstIterator : public IConstIterator<T> {
 	private:
-		T* pointer;
+		typename DynamicArray<T>::ConstIterator it;
 	public:
-		Iterator(ArraySequence<T>* seq, int index) {
-			this->collection = seq;
-			this->index = index;
-			this->pointer = (0 <= index && index < seq->get_length() ? &seq->operator[](index) : nullptr);
+		ConstIterator() {}
+		ConstIterator(typename DynamicArray<T>::ConstIterator it) : it(it) {}
+
+		ConstIterator operator+ (int n) {
+			it = it + n;
+			return *this;
 		}
 
-		Iterator operator+ (int n) const {
-			Iterator it = *this;
-			it.pointer += n;
-			it.index += n;
-			return it;
-		}
-		Iterator operator- (int n) const {
-			Iterator it = *this;
-			it.pointer -= n;
-			it.index -= n;
-			return it;
-		}
-		Iterator operator++ () {
-			++this->pointer;
-			++this->index;
+		ConstIterator operator- (int n) {
+			it = it - n;
 			return *this;
 		}
-		Iterator operator-- () {
-			--this->pointer;
-			--this->index;
+
+		ConstIterator& operator++ () {
+			++it;
 			return *this;
+		}
+
+		ConstIterator operator++ (int) {
+			ConstIterator iter = *this;
+			++(*this);
+			return iter;
+		}
+
+		ConstIterator& operator-- () {
+			--it;
+			return *this;
+		}
+
+		ConstIterator operator-- (int) {
+			ConstIterator iter = *this;
+			--(*this);
+			return iter;
+		}
+
+		bool operator== (const ConstIterator& other) const {
+			return it == other.it;
+		}
+
+		bool operator!= (const ConstIterator& other) const {
+			return it != other.it;
+		}
+
+		void next() override {
+			this->operator++();
+		}
+		void prev() override {
+			this->operator--();
+		}
+		bool is_equel(IConstIterator<T>* other) const override {
+			ConstIterator* child = dynamic_cast<ConstIterator*>(other);
+			return child != nullptr && *child == *this;
+		}
+
+		T get() const override {
+			return this->it.get();
+		}
+	};
+	class Iterator : public IIterator<T> {
+	private:
+		typename DynamicArray<T>::Iterator it;
+	public:
+		Iterator() {}
+		Iterator(typename DynamicArray<T>::Iterator it) : it(it) {}
+
+		Iterator operator+ (int n) {
+			it = it + n;
+			return *this;
+		}
+
+		Iterator operator- (int n) {
+			it = it - n;
+			return *this;
+		}
+
+		Iterator& operator++ () {
+			++it;
+			return *this;
+		}
+
+		Iterator operator++ (int) {
+			Iterator iter = *this;
+			++(*this);
+			return iter;
+		}
+
+		Iterator& operator-- () {
+			--it;
+			return *this;
+		}
+
+		Iterator operator-- (int) {
+			Iterator iter = *this;
+			--(*this);
+			return iter;
 		}
 
 		bool operator== (const Iterator& other) const {
-			return this->pointer == other.pointer;
+			return it == other.it;
 		}
+
 		bool operator!= (const Iterator& other) const {
-			return !(this->operator==(other));
+			return it != other.it;
 		}
 
 		void next() override {
@@ -56,29 +125,42 @@ public:
 		}
 		bool is_equel(IIterator<T>* other) const override {
 			Iterator* child = dynamic_cast<Iterator*>(other);
-			return child != nullptr && this->collection == child->collection && this->index == child->index;
+			return child != nullptr && *child == *this;
 		}
 
 		T get() const override {
-			return this->collection->get(this->index);
+			return this->it.get();
 		}
 
 		T& operator* () {
-			return this->collection->operator[](this->index);
+			return *(this->it);
 		}
 	};
 
+	ConstIterator cbegin() {
+		return ConstIterator(this->dynamicArray->cbegin());
+	}
+	ConstIterator cend() {
+		return ConstIterator(this->dynamicArray->cend());
+	}
+	IConstIterator<T>* Icbegin() const override {
+		return new ConstIterator(this->dynamicArray->cbegin());
+	}
+	IConstIterator<T>* Icend() const override {
+		return new ConstIterator(this->dynamicArray->cend());
+	}
+
 	Iterator begin() {
-		return Iterator(this, 0);
+		return Iterator(this->dynamicArray->begin());
 	}
 	Iterator end() {
-		return Iterator(this, this->get_length());
+		return Iterator(this->dynamicArray->end());
 	}
 	IIterator<T>* Ibegin() override {
-		return new Iterator(this, 0);
+		return new Iterator(this->dynamicArray->begin());
 	}
-	IIterator<T>* Iend() override{
-		return new Iterator(this, this->get_length());
+	IIterator<T>* Iend() override {
+		return new Iterator(this->dynamicArray->end());
 	}
 
 	ArraySequence() {
@@ -104,6 +186,7 @@ public:
 			it->next();
 		}
 	}
+
 	Sequence<T>* create() const override {
 		return new ArraySequence<T>();
 	}
@@ -127,15 +210,6 @@ public:
 	Option<T> try_get(int index) const override {
 		return this->dynamicArray->try_get(index);
 	}
-
-	/*Sequence<T>* get_sub_sequence(int startIndex, int endIndex) const override {
-		DynamicArray<T>* d = new DynamicArray<T>(endIndex - startIndex);
-		for (int i = startIndex, j = 0; i < endIndex; ++i, ++j) {
-			(*d)[j] = (*(this->dynamicArray))[i];
-		}
-		Sequence<T>* res = new ArraySequence<T>(*d);
-		return res;
-	}*/
 
 	size_t get_length() const override {
 		return this->dynamicArray->get_length();

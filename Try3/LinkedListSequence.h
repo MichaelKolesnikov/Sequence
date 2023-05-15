@@ -7,47 +7,113 @@ class LinkedListSequence : public Sequence<T> {
 private:
 	LinkedList<T>* linked_list;
 public:
+	class ConstIterator : public IConstIterator<T> {
+	private:
+		typename LinkedList<T>::ConstIterator it;
+	public:
+		ConstIterator() {}
+		ConstIterator(typename LinkedList<T>::ConstIterator it) : it(it) {}
+
+		ConstIterator operator+ (int n) {
+			it = it + n;
+			return *this;
+		}
+
+		ConstIterator operator- (int n) {
+			it = it - n;
+			return *this;
+		}
+
+		ConstIterator& operator++ () {
+			++it;
+			return *this;
+		}
+
+		ConstIterator operator++ (int) {
+			ConstIterator iter = *this;
+			++(*this);
+			return iter;
+		}
+
+		ConstIterator& operator-- () {
+			--it;
+			return *this;
+		}
+
+		ConstIterator operator-- (int) {
+			ConstIterator iter = *this;
+			--(*this);
+			return iter;
+		}
+
+		bool operator== (const ConstIterator& other) const {
+			return it == other.it;
+		}
+
+		bool operator!= (const ConstIterator& other) const {
+			return it != other.it;
+		}
+
+		void next() override {
+			this->operator++();
+		}
+		void prev() override {
+			this->operator--();
+		}
+		bool is_equel(IConstIterator<T>* other) const override {
+			ConstIterator* child = dynamic_cast<ConstIterator*>(other);
+			return child != nullptr && *child == *this;
+		}
+
+		T get() const override {
+			return this->it.get();
+		}
+	};
 	class Iterator : public IIterator<T> {
 	private:
 		typename LinkedList<T>::Iterator it;
 	public:
-		Iterator(LinkedListSequence<T>* seq, int index) {
-			this->collection = seq;
-			this->index = index;
-			this->it = seq->linked_list->begin();
-			for (int i = 0; i < index && i < seq->get_length(); ++i) {
-				++(this->it);
-			}
+		Iterator() {}
+		Iterator(typename LinkedList<T>::Iterator it) : it(it) {}
+
+		Iterator operator+ (int n) {
+			this->it = this->it + n;
+			return *this;
 		}
 
-		Iterator operator+ (int n) const {
-			Iterator it = *this;
-			it.it += n;
-			it.index += n;
-			return it;
-		}
-		Iterator operator- (int n) const {
-			Iterator it = *this;
-			it.it -= n;
-			it.index -= n;
-			return it;
-		}
-		Iterator operator++ () {
-			++(this->it);
-			++this->index;
+		Iterator operator- (int n) {
+			it = it - n;
 			return *this;
 		}
-		Iterator operator-- () {
-			--(this->it);
-			--this->index;
+
+		Iterator& operator++ () {
+			++it;
 			return *this;
+		}
+
+		Iterator operator++ (int) {
+			Iterator iter = *this;
+			++(*this);
+			return iter;
+		}
+
+		Iterator& operator-- () {
+			--it;
+			return *this;
+		}
+
+		Iterator operator-- (int) {
+			Iterator iter = *this;
+			--(*this);
+			return iter;
 		}
 
 		bool operator== (const Iterator& other) const {
-			return (this->it) == other.it;
+			return it == other.it;
 		}
+
 		bool operator!= (const Iterator& other) const {
-			return !(this->operator==(other));
+			return it != other.it;
 		}
 
 		void next() override {
@@ -58,7 +124,7 @@ public:
 		}
 		bool is_equel(IIterator<T>* other) const override {
 			Iterator* child = dynamic_cast<Iterator*>(other);
-			return child != nullptr && this->collection == child->collection && this->index == child->index;
+			return child != nullptr && *child == *this;
 		}
 
 		T get() const override {
@@ -70,18 +136,32 @@ public:
 		}
 	};
 
+	ConstIterator cbegin() const {
+		return ConstIterator(this->linked_list->cbegin());
+	}
+	ConstIterator cend() const {
+		return ConstIterator(this->linked_list->cend());
+	}
+
+	IConstIterator<T>* Icbegin() const override {
+		return new ConstIterator(this->linked_list->cbegin());
+	}
+	IConstIterator<T>* Icend() const override {
+		return new ConstIterator(this->linked_list->cend());
+	}
+
 	Iterator begin() {
-		return Iterator(this, 0);
+		return Iterator(this->linked_list->begin());
 	}
 	Iterator end() {
-		return Iterator(this, this->get_length());
+		return Iterator(this->linked_list->end());
 	}
 	
 	IIterator<T>* Ibegin() override {
-		return new Iterator(this, 0);
+		return new Iterator(this->linked_list->begin());
 	}
 	IIterator<T>* Iend() override {
-		return new Iterator(this, this->get_length());
+		return new Iterator(this->linked_list->end());
 	}
 
 	LinkedListSequence() {
@@ -130,13 +210,6 @@ public:
 	Option<T> try_get(int index) const override {
 		return this->linked_list->try_get(index);
 	}
-
-	/*Sequence<T>* get_sub_sequence(int startIndex, int endIndex) const override {
-		LinkedList<T>* subList = this->linked_list->get_sub_list(startIndex, endIndex);
-		Sequence<T>* seq = new LinkedListSequence<T>(*subList);
-		delete subList;
-		return seq;
-	}*/
 
 	size_t get_length() const override {
 		return this->linked_list->get_length();

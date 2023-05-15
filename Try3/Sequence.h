@@ -7,6 +7,8 @@
 template <class T>
 class Sequence : public ICollection<T> {
 public:
+	virtual IConstIterator<T>* Icbegin() const = 0;
+	virtual IConstIterator<T>* Icend() const = 0;
 	virtual IIterator<T>* Ibegin() = 0;
 	virtual IIterator<T>* Iend() = 0;
 
