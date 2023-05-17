@@ -61,7 +61,7 @@ public:
 		void prev() override {
 			this->operator--();
 		}
-		bool is_equel(IConstIterator<T>* other) const override {
+		bool is_equal(IConstIterator<T>* other) const override {
 			ConstIterator* child = dynamic_cast<ConstIterator*>(other);
 			return child != nullptr && *child == *this;
 		}
@@ -123,7 +123,7 @@ public:
 		void prev() override {
 			this->operator--();
 		}
-		bool is_equel(IIterator<T>* other) const override {
+		bool is_equal(IIterator<T>* other) const override {
 			Iterator* child = dynamic_cast<Iterator*>(other);
 			return child != nullptr && *child == *this;
 		}

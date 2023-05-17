@@ -1,6 +1,7 @@
 ﻿#include "ArraySequence.h"
 #include "LinkedListSequence.h"
 #include <typeinfo>
+#include "Vector.h"
 
 using namespace std;
 
@@ -241,5 +242,12 @@ void call_interface() {
 }
 
 int main() {
-	
+	DynamicArray<int>* d = new DynamicArray<int>(new int[] {1, 2, 3, 4}, 4);
+	// cout << *d;
+	Vector<int> v(d);
+	/*for (int i = 0; i < v->get_dimension(); ++i) {
+		cout << v->get(i) << " ";
+	}*/
+	cout << v;
+
 }

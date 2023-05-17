@@ -142,6 +142,7 @@
     <ClCompile Include="ArraySequence.cpp" />
     <ClCompile Include="DynamicArray.cpp" />
     <ClCompile Include="Educator.cpp" />
+    <ClCompile Include="NumberTheory.cpp" />
     <ClCompile Include="ICollection.cpp" />
     <ClCompile Include="IIterator.cpp" />
     <ClCompile Include="IndexOutOfRange.cpp" />
@@ -159,6 +160,7 @@
     <ClInclude Include="ArraySequence.h" />
     <ClInclude Include="DynamicArray.h" />
     <ClInclude Include="Educator.h" />
+    <ClInclude Include="NumberTheory.h" />
     <ClInclude Include="ICollection.h" />
     <ClInclude Include="IIterator.h" />
     <ClInclude Include="IndexOutOfRange.h" />

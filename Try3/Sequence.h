@@ -49,7 +49,7 @@ public:
 
 	Sequence <T>* concat(const Sequence <T>* const otherSequence) const {
 		Sequence<T>* concated = this->copy();
-		for (IConstIterator<T>* it = otherSequence->Icbegin(); !(it->is_equel(otherSequence->Icend())); it->next()) {
+		for (IConstIterator<T>* it = otherSequence->Icbegin(); !(it->is_equal(otherSequence->Icend())); it->next()) {
 			concated->append(it->get());
 		}
 		return concated;
@@ -57,7 +57,7 @@ public:
 
 	Sequence<T>* find(bool (*f)(T)) const {
         Sequence<T>* result = this->create();
-        for (IConstIterator<T>* it = this->Icbegin(); !(it->is_equel(this->Icend())); it->next()) {
+        for (IConstIterator<T>* it = this->Icbegin(); !(it->is_equal(this->Icend())); it->next()) {
             if (f(it->get())) {
 				result->append(it->get());
             }    
@@ -66,7 +66,7 @@ public:
     }
 
     T reduce(T(*f)(T, T), T base) const {
-		for (IConstIterator<T>* it = this->Icend(); !(it->is_equel(this->Icbegin()));) {
+		for (IConstIterator<T>* it = this->Icend(); !(it->is_equal(this->Icbegin()));) {
 			it->prev();
             base = f(it->get(), base);
         }
@@ -76,7 +76,7 @@ public:
 	friend std::ostream& operator<< (std::ostream& stream, const Sequence<T>* const sequence) {
 		stream << std::endl << "[";
 		IConstIterator<T>* it = sequence->Icbegin();
-		for (; !(it->is_equel(sequence->Icend())); it->next()) {
+		for (; !(it->is_equal(sequence->Icend())); it->next()) {
 			stream << it->get() << " ";
 		}
 		stream << "]" << std::endl;
@@ -89,7 +89,7 @@ template <class output_type, class sequence_output_type, class input_type>
 typename std::enable_if<std::is_base_of<Sequence<output_type>, sequence_output_type>::value, Sequence<output_type>*>::type
 map_sequence(output_type(*f)(input_type), const Sequence<input_type>* const sequence) {
 	Sequence<output_type>* result = new sequence_output_type();
-	for (IConstIterator<input_type>* it = sequence->Icbegin(); !(it->is_equel(sequence->Icend())); it->next()) {
+	for (IConstIterator<input_type>* it = sequence->Icbegin(); !(it->is_equal(sequence->Icend())); it->next()) {
 		result->append(f(it->get()));
 	}
 	return result;
