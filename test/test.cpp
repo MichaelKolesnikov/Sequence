@@ -3,6 +3,9 @@
 #include "..\Try3\LinkedListSequence.h"
 #include "..\Try3\Vector.h"
 #include "..\Try3\NumberTheory.h"
+#include "..\Try3\PermutationGenerator.h"
+#include "..\Try3\Stack.h"
+#include "..\Try3\HanoiTowers.h"
 
 using namespace std;
 
@@ -175,15 +178,15 @@ TEST(Vector, operations) {
 	EXPECT_EQ((int)sqrt(s), vector1.norm());
 }
 
-TEST(EratosthenesSieve, is_prime) {
+TEST(EratosthenesSieve, prime_) {
 	int n = 1e5;
 	EratosthenesSieve Eratosthene(n);
 	for (int i = 0; i < n; ++i) {
-		EXPECT_EQ(is_prime(i), Eratosthene.is_prime(i));
+		EXPECT_EQ(prime(i), Eratosthene.is_prime(i));
 	}
 }
 
-TEST(Factorizer, factorize) {
+TEST(Factorizer, factorize_) {
 	int size = 1e3;
 	EratosthenesSieve Eratosthenes_sieve(size);
 	Factorizer factorizer(size);
@@ -196,4 +199,38 @@ TEST(Factorizer, factorize) {
 		EXPECT_EQ(divisors->reduce(multiply, 1), i);
 		delete divisors;
 	}
+}
+
+//TEST(PermutationGenerator, generate_permutation) {
+//	int size = 10;
+//	int* data = new int[size];
+//	for (int i = 0; i < size; ++i) {
+//		data[i] = i;
+//	}
+//	PermutationGenerator<int> generator(ArraySequence<int>(data, size));
+//	for (int i = 0; i < 10; ++i) {
+//		cout << generator.generate_permutation();
+//	}
+//}
+
+TEST(Stack, stack) {
+	Stack<int> stack = Stack<int>();
+	stack.push(5);
+	EXPECT_EQ(stack.peek(), 5);
+	stack.push(8);
+	EXPECT_EQ(8, stack.pop());
+	EXPECT_EQ(5, stack.pop());
+	EXPECT_EQ(true, stack.is_empty());
+}
+
+TEST(HanoiTowers, solve_Hanoi_towers) {
+	int n = 20;
+	Ring* rings = new Ring[n];
+	for (int i = n - 1; i >= 0; --i) {
+		rings[n - i - 1] = Ring(i + 1, i + 1);
+	}
+	ArraySequence<Ring> Rings = ArraySequence<Ring>(rings, n);
+	HanoiTowers Hanoi_towers(Rings, (size_t)0, (size_t)2);
+	solve_Hanoi_towers(Hanoi_towers);
+	EXPECT_EQ(Hanoi_towers.win(), true);
 }

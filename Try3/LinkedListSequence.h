@@ -224,4 +224,8 @@ public:
 	void insert_at(T item, int index) override {
 		this->linked_list->insert_at(item, index);
 	}
+
+	T pop() {
+		return this->linked_list->pop();
+	}
 };

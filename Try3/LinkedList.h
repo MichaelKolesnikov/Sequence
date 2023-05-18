@@ -219,6 +219,15 @@ public:
 		++this->length;
 	}
 
+	T pop() {
+		T value = this->get_last();
+		NodeList<T>* new_tail = this->tail->prev;
+		new_tail->next = nullptr;
+		delete this->tail;
+		this->tail = new_tail;
+		return value;
+	}
+
 	LinkedList<T>* concat(LinkedList<T>* list) {
 		LinkedList<T>* list1 = new LinkedList<T>(*this);
 		LinkedList<T>* list2 = new LinkedList<T>(*list);

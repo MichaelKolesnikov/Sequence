@@ -3,7 +3,7 @@ template <class T>
 class Option {
 private:
 	bool has_value_ = false;
-	T value_;
+	T value_ = T();
 public:
 	Option() {}
 	Option(T value) {

@@ -47,6 +47,8 @@ public:
 	virtual void prepend(T item) = 0;
 	virtual void insert_at(T item, int index) = 0;
 
+	virtual T pop() = 0;
+
 	Sequence <T>* concat(const Sequence <T>* const otherSequence) const {
 		Sequence<T>* concated = this->copy();
 		for (IConstIterator<T>* it = otherSequence->Icbegin(); !(it->is_equal(otherSequence->Icend())); it->next()) {

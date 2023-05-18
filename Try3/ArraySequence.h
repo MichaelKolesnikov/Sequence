@@ -228,4 +228,10 @@ public:
 		}
 		(*(this->dynamicArray))[index] = item;
 	}
+
+	T pop() {
+		T value = this->get_last();
+		this->dynamicArray->resize(this->get_length() - 1);
+		return value;
+	}
 };

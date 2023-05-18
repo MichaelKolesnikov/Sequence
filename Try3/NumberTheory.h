@@ -4,33 +4,46 @@
 
 class EratosthenesSieve {
 private:
-	ArraySequence<bool>* prime;
+	ArraySequence<bool>* prime_;
 public:
 	EratosthenesSieve(size_t n) {
-		this->prime = new ArraySequence<bool>(new bool[n], n);
-		for (size_t i = 0; i < this->prime->get_length(); ++i) {
-			this->prime->operator[](i) = true;
+		this->prime_ = new ArraySequence<bool>(new bool[n], n);
+		for (size_t i = 0; i < this->prime_->get_length(); ++i) {
+			this->prime_->operator[](i) = true;
 		}
-		this->prime->operator[](0) = this->prime->operator[](1) = false;
+		this->prime_->operator[](0) = this->prime_->operator[](1) = false;
 		for (size_t i = 2; i < n; ++i) {
-			if (this->prime->get(i)) {
+			if (this->prime_->get(i)) {
 				for (size_t j = 2 * i; j < n; j += i) {
-					this->prime->operator[](j) = false;
+					this->prime_->operator[](j) = false;
 				}
 			}
 		}
 	}
 
 	bool is_prime(size_t num) const {
-		return this->prime->get(num);
+		return this->prime_->get(num);
 	}
 
-	EratosthenesSieve() {
-		delete this->prime;
+	~EratosthenesSieve() {
+		delete this->prime_;
 	}
+
+	/*static bool _prime(int n) {
+		if (n < 2) {
+			return false;
+		}
+		int sq = sqrt(n);
+		for (int i = 2; i <= sq; ++i) {
+			if (n % i == 0) {
+				return false;
+			}
+		}
+		return true;
+	}*/
 };
 
-bool is_prime(int n) {
+bool prime(int n) {
 	if (n < 2) {
 		return false;
 	}

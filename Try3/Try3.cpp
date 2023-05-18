@@ -2,6 +2,8 @@
 #include "LinkedListSequence.h"
 #include <typeinfo>
 #include "Vector.h"
+#include "NumberTheory.h"
+#include "HanoiTowers.h"
 
 using namespace std;
 
@@ -242,12 +244,15 @@ void call_interface() {
 }
 
 int main() {
-	DynamicArray<int>* d = new DynamicArray<int>(new int[] {1, 2, 3, 4}, 4);
-	// cout << *d;
-	Vector<int> v(d);
-	/*for (int i = 0; i < v->get_dimension(); ++i) {
-		cout << v->get(i) << " ";
-	}*/
-	cout << v;
-
+	int n = 7;
+	Ring* rings = new Ring[n];
+	for (int i = n - 1; i >= 0; --i) {
+		rings[n - i - 1] = Ring(i + 1, i + 1);
+	}
+	ArraySequence<Ring> Rings = ArraySequence<Ring>(rings, n);
+	HanoiTowers Hanoi_towers(Rings, (size_t)0, (size_t)2);
+	cout << Hanoi_towers;
+	solve_Hanoi_towers(Hanoi_towers);
+	cout << Hanoi_towers;
+	cout << Hanoi_towers.win();
 }
