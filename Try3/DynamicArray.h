@@ -112,6 +112,27 @@ public:
 		this->data = new T[this->length];
 		memcpy(this->data, dynamic_array.data, length * sizeof(T));
 	}
+
+    DynamicArray<T>& operator=(const DynamicArray<T>& other) {
+        if (this != &other) {
+            delete[] this->data;
+            this->length = other.length;
+            this->data = new T[length];
+            memcpy(this->data, other.data, length * sizeof(T));
+        }
+        return *this;
+    }
+
+    DynamicArray<T>& operator=(DynamicArray<T>&& other) noexcept {
+        if (this != &other) {
+            delete[] this->data;
+            this->length = other.length;
+            this->data = other.data;
+            other.length = 0;
+            other.data = nullptr;
+        }
+        return *this;
+    }
 	
 	size_t get_length() const override {
 		return this->length;

@@ -4,6 +4,7 @@
 #include "Vector.h"
 #include "NumberTheory.h"
 #include "HanoiTowers.h"
+#include "PermutationGenerator.h"
 
 using namespace std;
 
@@ -205,12 +206,20 @@ T f_map(T x) {
 
 void call_interface() {
 	bool working = true;
+	EratosthenesSieve Er(10000);
+	ArraySequence<int> seq(10);
+	for (int i = 0; i < 10; ++i) {
+		seq[i] = i;
+	}
+	PermutationGenerator<int> gen = PermutationGenerator<int>(seq);
 	while (working) {
 		string type;
-		cout << "Select the type of data to be stored" << endl;
-		cout << "1: int, "
-			<< "2: double, "
-			<< "3: char, "
+		cout << "Select the type of data to be stored\nor generate permutation\nor check simplicity" << endl;
+		cout << "1: int, " << endl
+			<< "2: double, " << endl
+			<< "3: char, " << endl
+			<< "4: check simplicity, " << endl
+			<< "5: gen perm, " << endl
 			<< "9: EXIT" << endl;
 		cin >> type;
 		switch (type[0])
@@ -230,13 +239,30 @@ void call_interface() {
 			process_sequence(sequence, f_find, f_reduce, f_map);
 			break;
 		}
+		case '4': {
+			int n;
+			cin >> n;
+			if (Er.is_prime(n)) {
+				cout << "it is prime" << endl;
+			}
+			else {
+				cout << "it is not prime" << endl;
+			}
+			break;
+		}
+		case '5': {
+			ArraySequence<int>* perm = gen.generate_permutation();
+			cout << perm << endl;
+			delete perm;
+			break;
+		}
 		case '9': {
 			working = false;
 			cout << "Good bye!" << endl;
 			break;
 		}
 		default: {
-			cout << "You entered the wrong type" << endl;
+			cout << "You entered the wrong command" << endl;
 			break;
 		}
 		}
@@ -244,15 +270,5 @@ void call_interface() {
 }
 
 int main() {
-	int n = 7;
-	Ring* rings = new Ring[n];
-	for (int i = n - 1; i >= 0; --i) {
-		rings[n - i - 1] = Ring(i + 1, i + 1);
-	}
-	ArraySequence<Ring> Rings = ArraySequence<Ring>(rings, n);
-	HanoiTowers Hanoi_towers(Rings, (size_t)0, (size_t)2);
-	cout << Hanoi_towers;
-	solve_Hanoi_towers(Hanoi_towers);
-	cout << Hanoi_towers;
-	cout << Hanoi_towers.win();
+	call_interface();
 }

@@ -6,6 +6,7 @@
 #include "..\Try3\PermutationGenerator.h"
 #include "..\Try3\Stack.h"
 #include "..\Try3\HanoiTowers.h"
+#include "..\Try3\Matrix.h"
 
 using namespace std;
 
@@ -151,13 +152,13 @@ TEST(Vector, operations) {
 	for (size_t i = 0; i < size; ++i) {
 		data1[i] = rand();
 	}
-	Vector<int> vector1(new DynamicArray<int>(data1, size));
+	Vector<int> vector1(DynamicArray<int>(data1, size));
 
 	int* data2 = new int[size];
 	for (size_t i = 0; i < size; ++i) {
 		data2[i] = rand();
 	}
-	Vector<int> vector2(new DynamicArray<int>(data2, size));
+	Vector<int> vector2(DynamicArray<int>(data2, size));
 
 	int s = 0;
 	for (int i = 0; i < size; ++i) {
@@ -201,17 +202,17 @@ TEST(Factorizer, factorize_) {
 	}
 }
 
-//TEST(PermutationGenerator, generate_permutation) {
-//	int size = 10;
-//	int* data = new int[size];
-//	for (int i = 0; i < size; ++i) {
-//		data[i] = i;
-//	}
-//	PermutationGenerator<int> generator(ArraySequence<int>(data, size));
-//	for (int i = 0; i < 10; ++i) {
-//		cout << generator.generate_permutation();
-//	}
-//}
+TEST(PermutationGenerator, generate_permutation) {
+	int size = 10;
+	int* data = new int[size];
+	for (int i = 0; i < size; ++i) {
+		data[i] = i;
+	}
+	PermutationGenerator<int> generator(ArraySequence<int>(data, size));
+	for (int i = 0; i < 10; ++i) {
+		cout << generator.generate_permutation();
+	}
+}
 
 TEST(Stack, stack) {
 	Stack<int> stack = Stack<int>();
@@ -234,3 +235,15 @@ TEST(HanoiTowers, solve_Hanoi_towers) {
 	solve_Hanoi_towers(Hanoi_towers);
 	EXPECT_EQ(Hanoi_towers.win(), true);
 }
+
+//TEST(Matrix, matrix) {
+//	int m = 10, n = 5;
+//	DynamicArray<DynamicArray<float>> d = DynamicArray<DynamicArray<float>>(m);
+//	for (int i = 0; i < m; ++i) {
+//		d[i] = DynamicArray<float>(n);
+//		for (int j = 0; j < n; ++j) {
+//			d[i][j] = i * 10 + j;
+//		}
+//	}
+//	Matrix<float> matrix = Matrix<float>(d);
+//}
