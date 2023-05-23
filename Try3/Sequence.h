@@ -30,15 +30,15 @@ public:
 	virtual T get_first() const = 0;
 	virtual T get_last() const = 0;
 
-	Sequence<T>* get_sub_sequence(int startIndex, int endIndex) const {
-		Sequence<T>* sub = this->create();
+	Sequence<T>& get_sub_sequence(int startIndex, int endIndex) const {
+		Sequence<T>& sub = *(this->create());
 		IConstIterator<T>* it = this->Icbegin();
 		int i = 0;
 		for (; i < startIndex; ++i) {
 			it->next();
 		}
 		for (; i < endIndex; ++i, it->next()) {
-			sub->append(it->get());
+			sub.append(it->get());
 		}
 		return sub;
 	}
@@ -49,19 +49,19 @@ public:
 
 	virtual T pop() = 0;
 
-	Sequence <T>* concat(const Sequence <T>* const otherSequence) const {
-		Sequence<T>* concated = this->copy();
-		for (IConstIterator<T>* it = otherSequence->Icbegin(); !(it->is_equal(otherSequence->Icend())); it->next()) {
-			concated->append(it->get());
+	Sequence <T>& concat(const Sequence <T>& const otherSequence) const {
+		Sequence<T>& concated = *(this->copy());
+		for (IConstIterator<T>* it = otherSequence.Icbegin(); !(it->is_equal(otherSequence.Icend())); it->next()) {
+			concated.append(it->get());
 		}
 		return concated;
 	}
 
-	Sequence<T>* find(bool (*f)(T)) const {
-        Sequence<T>* result = this->create();
+	Sequence<T>& find(bool (*f)(T)) const {
+        Sequence<T>& result = *(this->create());
         for (IConstIterator<T>* it = this->Icbegin(); !(it->is_equal(this->Icend())); it->next()) {
             if (f(it->get())) {
-				result->append(it->get());
+				result.append(it->get());
             }    
         }
         return result;
@@ -75,10 +75,10 @@ public:
         return base;
     }
 
-	friend std::ostream& operator<< (std::ostream& stream, const Sequence<T>* const sequence) {
+	friend std::ostream& operator<< (std::ostream& stream, const Sequence<T>& sequence) {
 		stream << std::endl << "[";
-		IConstIterator<T>* it = sequence->Icbegin();
-		for (; !(it->is_equal(sequence->Icend())); it->next()) {
+		IConstIterator<T>* it = sequence.Icbegin();
+		for (; !(it->is_equal(sequence.Icend())); it->next()) {
 			stream << it->get() << " ";
 		}
 		stream << "]" << std::endl;
@@ -88,11 +88,11 @@ public:
 };
 
 template <class output_type, class sequence_output_type, class input_type>
-typename std::enable_if<std::is_base_of<Sequence<output_type>, sequence_output_type>::value, Sequence<output_type>*>::type
-map_sequence(output_type(*f)(input_type), const Sequence<input_type>* const sequence) {
-	Sequence<output_type>* result = new sequence_output_type();
-	for (IConstIterator<input_type>* it = sequence->Icbegin(); !(it->is_equal(sequence->Icend())); it->next()) {
-		result->append(f(it->get()));
+typename std::enable_if<std::is_base_of<Sequence<output_type>, sequence_output_type>::value, Sequence<output_type>&>::type
+map_sequence(output_type(*f)(input_type), const Sequence<input_type>& sequence) {
+	Sequence<output_type>& result = *(new sequence_output_type());
+	for (IConstIterator<input_type>* it = sequence.Icbegin(); !(it->is_equal(sequence.Icend())); it->next()) {
+		result.append(f(it->get()));
 	}
 	return result;
 }

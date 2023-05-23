@@ -140,6 +140,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="ArraySequence.cpp" />
+    <ClCompile Include="BinaryTree.cpp" />
     <ClCompile Include="DynamicArray.cpp" />
     <ClCompile Include="Educator.cpp" />
     <ClCompile Include="ICollection.cpp" />
@@ -158,6 +159,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ArraySequence.h" />
+    <ClInclude Include="BinaryTree.h" />
     <ClInclude Include="DynamicArray.h" />
     <ClInclude Include="Educator.h" />
     <ClInclude Include="HanoiTowers.h" />

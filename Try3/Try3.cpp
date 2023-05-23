@@ -9,33 +9,37 @@
 using namespace std;
 
 template <class T>
-void process_sequence(Sequence<T>* sequence, bool(*f_find)(T x), T(*f_reduce)(T a, T b), T(*f_map)(T x)) {
-	cout << "Select the operation to be performed on the sequence" << endl;
-	cout << "1: get_length" << endl;
-	cout << "2: get item" << endl;
-	cout << "3: get sub sequence" << endl;
-	cout << "4: append" << endl;
-	cout << "5: prepend" << endl;
-	cout << "6: insert at" << endl;
-	cout << "7: concat" << endl;
-	cout << "8: find" << endl;
-	cout << "9: reduce" << endl;
-	cout << "10: EXIT" << endl;
-	cout << "11: print" << endl;
-	cout << "12: map" << endl;
+void process_sequence(Sequence<T>& sequence, bool(*f_find)(T x), T(*f_reduce)(T a, T b), T(*f_map)(T x)) {
+	// couts of possible actions
+	{
+		cout << "Select the operation to be performed on the sequence" << endl;
+		cout << "1: get_length" << endl;
+		cout << "2: get item" << endl;
+		cout << "3: get sub sequence" << endl;
+		cout << "4: append" << endl;
+		cout << "5: prepend" << endl;
+		cout << "6: insert at" << endl;
+		cout << "7: concat" << endl;
+		cout << "8: find" << endl;
+		cout << "9: reduce" << endl;
+		cout << "10: EXIT" << endl;
+		cout << "11: print" << endl;
+		cout << "12: map" << endl;
+	}
 	
 	bool working = true;
 	while (working) {
 		string operation;
 		cin >> operation;
+
 		if (operation == "1") {
-			cout << sequence->get_length() << endl;
+			cout << sequence.get_length() << endl;
 		}
 		else if (operation == "2") {
 			cout << "enter an index" << endl;
 			int index;
 			cin >> index;
-			Option<T> option = sequence->try_get(index);
+			Option<T> option = sequence.try_get(index);
 			if (option.has_value()) {
 				cout << option.value() << endl;
 			}
@@ -47,47 +51,47 @@ void process_sequence(Sequence<T>* sequence, bool(*f_find)(T x), T(*f_reduce)(T 
 			cout << "Enter the left and right index" << endl;
 			int l, r;
 			cin >> l >> r;
-			if (!(0 <= l && l <= r && r <= sequence->get_length())) {
+			if (!(0 <= l && l <= r && r <= sequence.get_length())) {
 				cout << "You entered the wrong indexes" << endl;
 				continue;
 			}
-			Sequence<T>* sub = sequence->get_sub_sequence(l, r);
+			Sequence<T>& sub = sequence.get_sub_sequence(l, r);
 			cout << sub;
 			cout << "Do you want to keep the cropped version? (then the old one will be lost) y/n" << endl;
 			string choice;
 			cin >> choice;
 			if (choice == "y") {
-				delete sequence;
+				delete &sequence;
 				sequence = sub;
 			}
 			else {
-				delete sub;
+				delete &sub;
 			}
 		}
 		else if (operation == "4") {
 			T value;
 			cout << "Enter a value" << endl;
 			cin >> value;
-			sequence->append(value);
+			sequence.append(value);
 		}
 		else if (operation == "5") {
 			T value;
 			cout << "Enter a value" << endl;
 			cin >> value;
-			sequence->prepend(value);
+			sequence.prepend(value);
 		}
 		else if (operation == "6") {
 			int index;
 			cout << "Enter an index" << endl;
 			cin >> index;
-			if (!(0 <= index && index <= sequence->get_length())) {
+			if (!(0 <= index && index <= sequence.get_length())) {
 				cout << "You entered the wrong indexes" << endl;
 				continue;
 			}
 			T value;
 			cout << "Enter a value" << endl;
 			cin >> value;
-			sequence->insert_at(value, index);
+			sequence.insert_at(value, index);
 		}
 		else if (operation == "7") {
 			int n;
@@ -108,34 +112,34 @@ void process_sequence(Sequence<T>* sequence, bool(*f_find)(T x), T(*f_reduce)(T 
 					break;
 				}
 			}
-			Sequence<T>* added = new ArraySequence<T>(data, n);
-			Sequence<T>* concated = sequence->concat(added);
-			delete sequence;
-			delete added;
+			Sequence<T>& added = *(new ArraySequence<T>(data, n));
+			Sequence<T>& concated = sequence.concat(added);
+			delete &sequence;
+			delete &added;
 			sequence = concated;
 		}
 		else if (operation == "8") {
-			Sequence<T>* whered = sequence->find(f_find);
+			Sequence<T>& whered = sequence.find(f_find);
 			cout << whered;
 			cout << "Do you want to keep the cropped version? (then the old one will be lost) y/n" << endl;
 			string choice;
 			cin >> choice;
 			if (choice == "y") {
-				delete sequence;
+				delete &sequence;
 				sequence = whered;
 			}
 			else {
-				delete whered;
+				delete &whered;
 			}
 		}
 		else if (operation == "9") {
 			T value;
 			cout << "Enter base value" << endl;
 			cin >> value;
-			cout << sequence->reduce(f_reduce, value) << endl;
+			cout << sequence.reduce(f_reduce, value) << endl;
 		}
 		else if (operation == "10") {
-			delete sequence;
+			delete &sequence;
 			cout << "You have finished the session.\nYou can start a new one" << endl;
 			working = false;
 		}
@@ -143,18 +147,18 @@ void process_sequence(Sequence<T>* sequence, bool(*f_find)(T x), T(*f_reduce)(T 
 			cout << sequence;
 		}
 		else if (operation == "12") {
-		Sequence<T>* mapped = map_sequence<T, ArraySequence<T>, T>(f_map, sequence);
-		cout << mapped;
-		cout << "Do you want to keep this version? (then the old one will be lost) y/n" << endl;
-		string choice;
-		cin >> choice;
-		if (choice == "y") {
-			delete sequence;
-			sequence = mapped;
-		}
-		else {
-			delete mapped;
-		}
+			Sequence<T>& mapped = map_sequence<T, ArraySequence<T>, T>(f_map, sequence);
+			cout << mapped;
+			cout << "Do you want to keep this version? (then the old one will be lost) y/n" << endl;
+			string choice;
+			cin >> choice;
+			if (choice == "y") {
+				delete &sequence;
+				sequence = mapped;
+			}
+			else {
+				delete &mapped;
+			}
 		}
 		else {
 			cout << "You entered an unknown operation" << endl;
@@ -206,36 +210,43 @@ T f_map(T x) {
 
 void call_interface() {
 	bool working = true;
+
 	EratosthenesSieve Er(10000);
+
 	ArraySequence<int> seq(10);
 	for (int i = 0; i < 10; ++i) {
 		seq[i] = i;
 	}
 	PermutationGenerator<int> gen = PermutationGenerator<int>(seq);
+
 	while (working) {
+		// capability output
+		{
+			cout << "Select the type of data to be stored\nor generate permutation\nor check simplicity" << endl;
+			cout << "1: int, " << endl
+				<< "2: double, " << endl
+				<< "3: char, " << endl
+				<< "4: check simplicity, " << endl
+				<< "5: gen perm, " << endl
+				<< "9: EXIT" << endl;
+		}
+
 		string type;
-		cout << "Select the type of data to be stored\nor generate permutation\nor check simplicity" << endl;
-		cout << "1: int, " << endl
-			<< "2: double, " << endl
-			<< "3: char, " << endl
-			<< "4: check simplicity, " << endl
-			<< "5: gen perm, " << endl
-			<< "9: EXIT" << endl;
 		cin >> type;
 		switch (type[0])
 		{
 		case '1': {
-			Sequence<int>* sequence = new ArraySequence<int>();
+			Sequence<int>& sequence = *(new ArraySequence<int>());
 			process_sequence(sequence, f_find, f_reduce, f_map);
 			break;
 		}
 		case '2': {
-			Sequence<double>* sequence = new ArraySequence<double>();
+			Sequence<double>& sequence = *(new ArraySequence<double>());
 			process_sequence(sequence, f_find, f_reduce, f_map);
 			break;
 		}
 		case '3': {
-			Sequence<char>* sequence = new ArraySequence<char>();
+			Sequence<char>& sequence = *(new ArraySequence<char>());
 			process_sequence(sequence, f_find, f_reduce, f_map);
 			break;
 		}
@@ -251,9 +262,8 @@ void call_interface() {
 			break;
 		}
 		case '5': {
-			ArraySequence<int>* perm = gen.generate_permutation();
+			ArraySequence<int> perm = gen.generate_permutation();
 			cout << perm << endl;
-			delete perm;
 			break;
 		}
 		case '9': {
@@ -270,5 +280,8 @@ void call_interface() {
 }
 
 int main() {
-	call_interface();
+	int n = 5;
+	int* data = new int[] { 0, 1, 2, 3, 4 };
+	Sequence<int>& seq = *(new ArraySequence<int>(data, n));
+	cout << seq;
 }
