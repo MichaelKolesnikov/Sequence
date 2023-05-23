@@ -6,7 +6,6 @@
 #include "..\Try3\PermutationGenerator.h"
 #include "..\Try3\Stack.h"
 #include "..\Try3\HanoiTowers.h"
-#include "..\Try3\Matrix.h"
 
 using namespace std;
 
@@ -187,18 +186,17 @@ TEST(EratosthenesSieve, prime_) {
 	}
 }
 
-TEST(Factorizer, factorize_) {
+TEST(Factorizer, factorize) {
 	int size = 1e3;
 	EratosthenesSieve Eratosthenes_sieve(size);
 	Factorizer factorizer(size);
 	int (*multiply)(int, int) = [](int a, int b) -> int {return a * b;};
 	for (int i = 1; i < size; ++i) {
-		ArraySequence<int>* divisors = factorizer.factorize(i);
-		for (IConstIterator<int>* it = divisors->Icbegin(); !(it->is_equal(divisors->Icend())); it->next()) {
+		ArraySequence<int> divisors = factorizer.factorize(i);
+		for (IConstIterator<int>* it = divisors.Icbegin(); !(it->is_equal(divisors.Icend())); it->next()) {
 			EXPECT_EQ(true, Eratosthenes_sieve.is_prime(it->get()));
 		}
-		EXPECT_EQ(divisors->reduce(multiply, 1), i);
-		delete divisors;
+		EXPECT_EQ(divisors.reduce(multiply, 1), i);
 	}
 }
 
@@ -233,17 +231,7 @@ TEST(HanoiTowers, solve_Hanoi_towers) {
 	ArraySequence<Ring> Rings = ArraySequence<Ring>(rings, n);
 	HanoiTowers Hanoi_towers(Rings, (size_t)0, (size_t)2);
 	solve_Hanoi_towers(Hanoi_towers);
-	EXPECT_EQ(Hanoi_towers.win(), true);
+	EXPECT_EQ(Hanoi_towers.is_win(), true);
 }
 
-//TEST(Matrix, matrix) {
-//	int m = 10, n = 5;
-//	DynamicArray<DynamicArray<float>> d = DynamicArray<DynamicArray<float>>(m);
-//	for (int i = 0; i < m; ++i) {
-//		d[i] = DynamicArray<float>(n);
-//		for (int j = 0; j < n; ++j) {
-//			d[i][j] = i * 10 + j;
-//		}
-//	}
-//	Matrix<float> matrix = Matrix<float>(d);
-//}
+

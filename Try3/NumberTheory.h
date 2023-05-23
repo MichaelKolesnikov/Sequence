@@ -5,6 +5,7 @@
 class EratosthenesSieve {
 private:
 	ArraySequence<bool>* prime_;
+	// all_primes = ArraySequence<int>
 public:
 	EratosthenesSieve(size_t n) {
 		this->prime_ = new ArraySequence<bool>(new bool[n], n);
@@ -81,14 +82,27 @@ public:
 		return minimal_prime_divisors->get(n);
 	}
 
-	ArraySequence<int>* factorize(int n) const {
+	ArraySequence<int>& factorize(int n) const {
 		ArraySequence<int>* prime_factors = new ArraySequence<int>((size_t)0);
 
 		while (n > 1) {
 			prime_factors->append(this->get_minimal_prime_divisor(n));
 			n /= this->get_minimal_prime_divisor(n);
 		}
-		return prime_factors;
+		return *prime_factors;
+	}
+
+	ArraySequence<int>& get_all_prime_divisors(int n) const {
+		ArraySequence<int>* prime_divisors = new ArraySequence<int>((size_t)0);
+		int divisor = this->get_minimal_prime_divisor(n);
+		while (n > 1) {
+			if (prime_divisors->get_length() > 0 && (*prime_divisors)[prime_divisors->get_length() - 1] != divisor) {
+				prime_divisors->append(divisor);
+			}
+			n /= this->get_minimal_prime_divisor(n);
+			divisor = this->get_minimal_prime_divisor(n);
+		}
+		return *prime_divisors;
 	}
 
 	~Factorizer() {

@@ -234,4 +234,8 @@ public:
 		this->dynamicArray->resize(this->get_length() - 1);
 		return value;
 	}
+
+	~ArraySequence() {
+		delete this->dynamicArray;
+	}
 };

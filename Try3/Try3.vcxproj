@@ -147,7 +147,6 @@
     <ClCompile Include="IndexOutOfRange.cpp" />
     <ClCompile Include="LinkedList.cpp" />
     <ClCompile Include="LinkedListSequence.cpp" />
-    <ClCompile Include="Matrix.cpp" />
     <ClCompile Include="Option.cpp" />
     <ClCompile Include="PermutationGenerator.cpp" />
     <ClCompile Include="Person.cpp" />
@@ -168,7 +167,6 @@
     <ClInclude Include="IndexOutOfRange.h" />
     <ClInclude Include="LinkedList.h" />
     <ClInclude Include="LinkedListSequence.h" />
-    <ClInclude Include="Matrix.h" />
     <ClInclude Include="Option.h" />
     <ClInclude Include="PermutationGenerator.h" />
     <ClInclude Include="Person.h" />

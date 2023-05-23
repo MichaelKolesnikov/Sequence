@@ -55,7 +55,7 @@ public:
 		return this->n;
 	}
 
-	bool win() const {
+	bool is_win() const {
 		return this->rod.get(this->get_target()).get_size() == this->get_n();
 	}
 
@@ -102,13 +102,6 @@ void make_solution(size_t n, size_t start, size_t target, ArraySequence<ArraySeq
 void solve_Hanoi_towers(HanoiTowers& Hanoi_towers) {
 	ArraySequence<ArraySequence<size_t>*> solution = ArraySequence<ArraySequence<size_t>*>();
 	make_solution(Hanoi_towers.get_n(), Hanoi_towers.get_start(), Hanoi_towers.get_target(), solution);
-	/*for (IConstIterator<ArraySequence<size_t>*>* it = solution->Icbegin(); !(it->is_equal(solution->Icend())); it->next()) {
-		cout << Hanoi_towers.move(
-			it->get()->get(0),
-			it->get()->get(1)
-		);
-	}*/
-	// cout << Hanoi_towers;
 	for (int i = 0; i < solution.get_length(); ++i) {
 		Hanoi_towers.move(solution.get(i)->get(0), solution.get(i)->get(1));
 	}
