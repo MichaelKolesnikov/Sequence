@@ -50,32 +50,6 @@ public:
 
 	virtual T pop() = 0;
 
-	ISequence<T>& concat(const ISequence <T>& const otherSequence) const {
-		ISequence<T>& concated = *(this->copy());
-		for (IConstIterator<T>* it = otherSequence.Icbegin(); !(it->is_equal(otherSequence.Icend())); it->next()) {
-			concated.append(it->get());
-		}
-		return concated;
-	}
-
-	ISequence<T>& find(bool (*f)(T)) const {
-        ISequence<T>& result = *(this->create());
-        for (IConstIterator<T>* it = this->Icbegin(); !(it->is_equal(this->Icend())); it->next()) {
-            if (f(it->get())) {
-				result.append(it->get());
-            }    
-        }
-        return result;
-    }
-
-    T reduce(T(*f)(T, T), T base) const {
-		for (IConstIterator<T>* it = this->Icend(); !(it->is_equal(this->Icbegin()));) {
-			it->prev();
-            base = f(it->get(), base);
-        }
-        return base;
-    }
-
 	friend std::ostream& operator<< (std::ostream& stream, const ISequence<T>& sequence) {
 		stream << std::endl << "[";
 		IConstIterator<T>* it = sequence.Icbegin();
@@ -97,3 +71,33 @@ map_sequence(output_type(*f)(input_type), const ISequence<input_type>& sequence)
 	}
 	return result;
 }
+
+template <class T>
+ISequence<T>& concat(const ISequence<T>& first_sequence, const ISequence<T>& const second_sequence) {
+	ISequence<T>& concated = *(first_sequence.copy());
+	for (IConstIterator<T>* it = second_sequence.Icbegin(); !(it->is_equal(second_sequence.Icend())); it->next()) {
+		concated.append(it->get());
+	}
+	return concated;
+}
+
+template <class T>
+ISequence<T>& find(const ISequence<T>& sequence, bool (*f)(T)) {
+	ISequence<T>& result = *(sequence.create());
+	for (IConstIterator<T>* it = sequence.Icbegin(); !(it->is_equal(sequence.Icend())); it->next()) {
+		if (f(it->get())) {
+			result.append(it->get());
+		}
+	}
+	return result;
+}
+
+template <class T>
+T reduce(const ISequence<T>& seq, T(*f)(T, T), T base) {
+	for (IConstIterator<T>* it = seq.Icend(); !(it->is_equal(seq.Icbegin()));) {
+		it->prev();
+		base = f(it->get(), base);
+	}
+	return base;
+}
+

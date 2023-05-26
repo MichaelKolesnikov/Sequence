@@ -141,20 +141,13 @@
   <ItemGroup>
     <ClCompile Include="ArraySequence.cpp" />
     <ClCompile Include="BinaryTree.cpp" />
-    <ClCompile Include="DynamicArray.cpp" />
     <ClCompile Include="Educator.cpp" />
-    <ClCompile Include="ICollection.cpp" />
-    <ClCompile Include="IConstIterator.cpp" />
-    <ClCompile Include="IIterator.cpp" />
     <ClCompile Include="IndexOutOfRange.cpp" />
     <ClCompile Include="ITree.cpp" />
-    <ClCompile Include="LinkedList.cpp" />
     <ClCompile Include="LinkedListSequence.cpp" />
     <ClCompile Include="NAryTree.cpp" />
-    <ClCompile Include="Option.cpp" />
     <ClCompile Include="PermutationGenerator.cpp" />
     <ClCompile Include="Person.cpp" />
-    <ClCompile Include="ISequence.cpp" />
     <ClCompile Include="Stack.cpp" />
     <ClCompile Include="Student.cpp" />
     <ClCompile Include="main.cpp" />
@@ -164,10 +157,13 @@
     <ClInclude Include="ArraySequence.h" />
     <ClInclude Include="BinaryTree.h" />
     <ClInclude Include="DynamicArray.h" />
+    <ClInclude Include="DynamicArray_realization.h" />
     <ClInclude Include="Educator.h" />
     <ClInclude Include="HanoiTowers.h" />
     <ClInclude Include="IConstIterator.h" />
+    <ClInclude Include="ISequence.h" />
     <ClInclude Include="ITree.h" />
+    <ClInclude Include="LinkedList_realization.h" />
     <ClInclude Include="NAryTree.h" />
     <ClInclude Include="NumberTheory.h" />
     <ClInclude Include="ICollection.h" />
@@ -179,7 +175,6 @@
     <ClInclude Include="PermutationGenerator.h" />
     <ClInclude Include="Person.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="ISequence.h" />
     <ClInclude Include="Stack.h" />
     <ClInclude Include="Student.h" />
     <ClInclude Include="Vector.h" />

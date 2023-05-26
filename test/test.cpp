@@ -32,7 +32,7 @@ TEST(ISequence, ArraySequence) {
 	delete[] d;
 }
 
-TEST(Sequence, LinkedListSequence) {
+TEST(ISequence, LinkedListSequence) {
 	ISequence<float>* s1 = new LinkedListSequence<float>();
 	ISequence<double>* s2 = new LinkedListSequence<double>(5);
 	int* data = new int[] { 0, 1, 2, 3, 4 };
@@ -55,7 +55,7 @@ TEST(Sequence, LinkedListSequence) {
 	delete[] d;
 }
 
-TEST(Sequence, get_sub_sequence) {
+TEST(ISequence, get_sub_sequence) {
 	ISequence<int>& s1 = *(new ArraySequence<int>(new int[] {1, 2, 3, 4, 5, 6}, 6));
 	int left, right;
 
@@ -89,10 +89,10 @@ TEST(Sequence, get_sub_sequence) {
 	delete& s1;
 }
 
-TEST(Sequence, concat) {
+TEST(ISequence, concat) {
 	ISequence<int>& s1 = *(new LinkedListSequence<int>(new int[] {4, 8, 0, 1, 2, 3}, 6));
 	ISequence<int>& s2 = *(new ArraySequence<int>(new int[] {6, 9, 0, 1, 4, 2, 3, 7}, 8));
-	ISequence<int>& concated = s1.concat(s2);
+	ISequence<int>& concated = concat(s1, s2);
 	int i = 0;
 	ISequence<int>* cur_seq = &s1;
 	for (IConstIterator<int>* it = concated.Icbegin(); !(it->is_equal(concated.Icend())); it->next()) {
@@ -108,10 +108,10 @@ TEST(Sequence, concat) {
 	delete &concated;
 }
 
-TEST(Sequence, find) {
+TEST(ISequence, find) {
 	ISequence<int>& s1 = *(new LinkedListSequence<int>(new int[] {5, 9, 0, 1, 2}, 5));
-	auto f = [](int x) {return x % 2 == 0;};
-	ISequence<int>& whered = s1.find(f);
+	bool (*f)(int) = [](int x) {return x % 2 == 0;};
+	ISequence<int>& whered = find(s1, f);
 	IIterator<int>* it1 = whered.Ibegin();
 	for (IConstIterator<int>* it = s1.Icbegin(); !(it->is_equal(s1.Icend())) && !(whered.Iend()); it->next()) {
 		if (f(it->get())) {
@@ -126,11 +126,11 @@ TEST(Sequence, find) {
 	}
 }
 
-TEST(Sequence, reduce) {
+TEST(ISequence, reduce) {
 	ISequence<int>* s1 = new ArraySequence<int>(new int[] {4, 6, 1, 7}, 4);
 	int base = 100;
-	auto f = [](int x, int y) {return x + y;};
-	auto val = s1->reduce(f, base);
+	int(*f)(int, int) = [](int x, int y) {return x + y;};
+	auto val = reduce(*s1, f, base);
 	for (IIterator<int>* it = s1->Iend(); !(it->is_equal(s1->Ibegin()));) {
 		it->prev();
 		base = f(it->get(), base);
@@ -139,7 +139,7 @@ TEST(Sequence, reduce) {
 	delete s1;
 }
 
-TEST(Sequence, map_sequence) {
+TEST(ISequence, map_sequence) {
 	ISequence<int>& s1 = *(new LinkedListSequence<int>(new int[] {3, 6, 9, 1, 2}, 5));
 	ISequence<double>& mapped = map_sequence<double, ArraySequence<double>, int>([](int x) {return (double)x / 2;}, s1);
 	auto it = mapped.Ibegin();
@@ -201,7 +201,7 @@ TEST(Factorizer, factorize) {
 		for (IConstIterator<int>* it = divisors.Icbegin(); !(it->is_equal(divisors.Icend())); it->next()) {
 			EXPECT_EQ(true, Eratosthenes_sieve.is_prime(it->get()));
 		}
-		EXPECT_EQ(divisors.reduce(multiply, 1), i);
+		EXPECT_EQ(reduce(divisors, multiply, 1), i);
 	}
 }
 
@@ -238,5 +238,3 @@ TEST(HanoiTowers, solve_Hanoi_towers) {
 	solve_Hanoi_towers(Hanoi_towers);
 	EXPECT_EQ(Hanoi_towers.is_win(), true);
 }
-
-

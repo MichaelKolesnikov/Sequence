@@ -51,9 +51,6 @@
     <ClCompile Include="LinkedListSequence.cpp">
       <Filter>Sequence</Filter>
     </ClCompile>
-    <ClCompile Include="ISequence.cpp">
-      <Filter>Sequence</Filter>
-    </ClCompile>
     <ClCompile Include="ITree.cpp">
       <Filter>Tree</Filter>
     </ClCompile>
@@ -65,24 +62,6 @@
     </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>Main</Filter>
-    </ClCompile>
-    <ClCompile Include="IIterator.cpp">
-      <Filter>IIterators</Filter>
-    </ClCompile>
-    <ClCompile Include="IConstIterator.cpp">
-      <Filter>IIterators</Filter>
-    </ClCompile>
-    <ClCompile Include="ICollection.cpp">
-      <Filter>Collection</Filter>
-    </ClCompile>
-    <ClCompile Include="LinkedList.cpp">
-      <Filter>Collection</Filter>
-    </ClCompile>
-    <ClCompile Include="DynamicArray.cpp">
-      <Filter>Collection</Filter>
-    </ClCompile>
-    <ClCompile Include="Option.cpp">
-      <Filter>DataTypes</Filter>
     </ClCompile>
     <ClCompile Include="Educator.cpp">
       <Filter>DataTypes</Filter>
@@ -116,9 +95,6 @@
     <ClInclude Include="HanoiTowers.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="ISequence.h">
-      <Filter>Sequence</Filter>
-    </ClInclude>
     <ClInclude Include="ArraySequence.h">
       <Filter>Sequence</Filter>
     </ClInclude>
@@ -143,9 +119,6 @@
     <ClInclude Include="ICollection.h">
       <Filter>Collection</Filter>
     </ClInclude>
-    <ClInclude Include="DynamicArray.h">
-      <Filter>Collection</Filter>
-    </ClInclude>
     <ClInclude Include="LinkedList.h">
       <Filter>Collection</Filter>
     </ClInclude>
@@ -160,6 +133,18 @@
     </ClInclude>
     <ClInclude Include="Student.h">
       <Filter>DataTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="DynamicArray.h">
+      <Filter>Collection</Filter>
+    </ClInclude>
+    <ClInclude Include="DynamicArray_realization.h">
+      <Filter>Collection</Filter>
+    </ClInclude>
+    <ClInclude Include="LinkedList_realization.h">
+      <Filter>Collection</Filter>
+    </ClInclude>
+    <ClInclude Include="ISequence.h">
+      <Filter>Sequence</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

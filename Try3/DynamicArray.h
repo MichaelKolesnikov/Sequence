@@ -5,8 +5,6 @@
 #include "IndexOutOfRange.h"
 #include "ICollection.h"
 
-using namespace std;
-
 template<class T>
 class DynamicArray : ICollection<T> {
 private:
@@ -14,166 +12,69 @@ private:
     protected:
         T* current;
     public:
-        BaseIterator() : current(nullptr) {}
-        BaseIterator(T* data) : current(data) {}
+        BaseIterator();
+        BaseIterator(T* data);
 
-        BaseIterator(const DynamicArray<T>& other) : current(other.data) {}
+        BaseIterator(const DynamicArray<T>& other);
 
-        BaseIterator operator+ (int n) {
-            return BaseIterator(current + n);
-        }
+        BaseIterator operator+ (int n);
+        BaseIterator operator- (int n);
 
-        BaseIterator operator- (int n) {
-            return BaseIterator(current - n);
-        }
+        BaseIterator& operator++ ();
+        BaseIterator operator++ (int);
 
-        BaseIterator& operator++ () {
-            current++;
-            return *this;
-        }
+        BaseIterator& operator-- ();
+        BaseIterator operator-- (int);
 
-        BaseIterator operator++ (int) {
-            Iterator iter = *this;
-            ++(*this);
-            return iter;
-        }
+        bool operator== (const BaseIterator& other) const;
+        bool operator!= (const BaseIterator& other) const;
 
-        BaseIterator& operator-- () {
-            current--;
-            return *this;
-        }
-
-        BaseIterator operator-- (int) {
-            BaseIterator iter = *this;
-            --(*this);
-            return iter;
-        }
-
-        bool operator== (const BaseIterator& other) const {
-            return this->current == other.current;
-        }
-
-        bool operator!= (const BaseIterator& other) const {
-            return !(this->operator==(other));
-        }
-
-        T get() const {
-            return *(current);
-        }
+        T get() const;
     };
-	size_t length;
-	T* data;
+
+    size_t length;
+    T* data;
 public:
     class ConstIterator : public BaseIterator {
     public:
-        ConstIterator() : BaseIterator() {}
-        ConstIterator(T* data) : BaseIterator(data) {};
-        ConstIterator(const DynamicArray<T>& other) : BaseIterator(other) {}
+        ConstIterator();
+        ConstIterator(T* data);
+        ConstIterator(const DynamicArray<T>& other);
     };
     class Iterator : public BaseIterator {
     public:
-        Iterator() : BaseIterator() {}
-        Iterator(T* data) : BaseIterator(data) {};
-        Iterator(const DynamicArray<T>& other) : BaseIterator(other) {}
+        Iterator();
+        Iterator(T* data);
+        Iterator(const DynamicArray<T>& other);
 
-        T& operator* () { 
-            return *(this->current); 
-        }
+        T& operator* ();
     };
 
-    ConstIterator cbegin() const {
-        return ConstIterator(this->data);
-    }
-    ConstIterator cend() const {
-        return ConstIterator(this->data + this->length);
-    }
-    Iterator begin() {
-        return Iterator(this->data);
-    }
-    Iterator end() {
-        return Iterator(this->data + this->length);
-    }
+    ConstIterator cbegin() const;
+    ConstIterator cend() const;
+    Iterator begin();
+    Iterator end();
 
-	DynamicArray() {
-		this->length = 0;
-		this->data = new T[0];
-	}
-	DynamicArray(size_t size) {
-		this->length = size;
-		this->data = new T[size];
-	}
-	DynamicArray(const T* const items, size_t size) {
-		this->length = size;
-		this->data = new T[size];
-		memcpy(this->data, items, size * sizeof(T));
-	}
-	DynamicArray(const DynamicArray<T>& dynamic_array) {
-		this->length = dynamic_array.get_length();
-		this->data = new T[this->length];
-		memcpy(this->data, dynamic_array.data, length * sizeof(T));
-	}
+    DynamicArray();
+    DynamicArray(size_t size);
+    DynamicArray(const T* const items, size_t size);
+    DynamicArray(const DynamicArray<T>& dynamic_array);
 
-    DynamicArray<T>& operator=(const DynamicArray<T>& other) {
-        if (this != &other) {
-            delete[] this->data;
-            this->length = other.length;
-            this->data = new T[length];
-            memcpy(this->data, other.data, length * sizeof(T));
-        }
-        return *this;
-    }
+    DynamicArray<T>& operator=(const DynamicArray<T>& other);
+    DynamicArray<T>& operator=(DynamicArray<T>&& other) noexcept;
 
-    DynamicArray<T>& operator=(DynamicArray<T>&& other) noexcept {
-        if (this != &other) {
-            delete[] this->data;
-            this->length = other.length;
-            this->data = other.data;
-            other.length = 0;
-            other.data = nullptr;
-        }
-        return *this;
-    }
-	
-	size_t get_length() const override {
-		return this->length;
-	}
+    size_t get_length() const override;
 
-	T& operator[](int index) {
-		if (index < 0 || this->length <= index) {
-			throw IndexOutOfRange();
-		}
-		return this->data[index];
-	}
+    T& operator[](int index);
 
-	T get(int index) const override {
-		if (index < 0 || this->length <= index) {
-			throw IndexOutOfRange();
-		}
-		return this->data[index];
-	}
-	Option<T> try_get(int index) const override {
-		if (index < 0 || this->length <= index) {
-			return Option<T>();
-		}
-		return Option<T>(this->get(index));
-	}
+    T get(int index) const override;
+    Option<T> try_get(int index) const override;
 
-	void resize(size_t newSize) {
-		this->length = newSize;
-		this->data = (T*)realloc(this->data, newSize * sizeof(T));
-	}
+    void resize(size_t newSize);
 
-	~DynamicArray() {
-		delete[] this->data;
-	}
+    ~DynamicArray();
 
-    friend std::ostream& operator<< (std::ostream& stream, const DynamicArray<T>& dynamic_array) {
-		stream << std::endl;
-		stream << dynamic_array.get_length() << std::endl;
-        for (auto it = dynamic_array.cbegin(); it != dynamic_array.cend(); ++it) {
-            stream << it.get() << " ";
-        }
-		stream << std::endl;
-        return stream;
-    }
+    friend std::ostream& operator<< (std::ostream& stream, const DynamicArray<T>& dynamic_array);
 };
+
+#include "DynamicArray_realization.h"

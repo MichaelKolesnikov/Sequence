@@ -113,13 +113,13 @@ void process_sequence(ISequence<T>* sequence, bool(*f_find)(T x), T(*f_reduce)(T
 				}
 			}
 			ISequence<T>& added = *(new ArraySequence<T>(data, n));
-			ISequence<T>& concated = sequence->concat(added);
+			ISequence<T>& concated = concat(*sequence, added);
 			delete sequence;
 			delete &added;
 			sequence = &concated;
 		}
 		else if (operation == "8") {
-			ISequence<T>& whered = sequence->find(f_find);
+			ISequence<T>& whered = find(*sequence, f_find);
 			cout << whered;
 			cout << "Do you want to keep the cropped version? (then the old one will be lost) y/n" << endl;
 			string choice;
@@ -136,7 +136,7 @@ void process_sequence(ISequence<T>* sequence, bool(*f_find)(T x), T(*f_reduce)(T
 			T value;
 			cout << "Enter base value" << endl;
 			cin >> value;
-			cout << sequence->reduce(f_reduce, value) << endl;
+			cout << reduce(*sequence, f_reduce, value) << endl;
 		}
 		else if (operation == "10") {
 			delete sequence;
