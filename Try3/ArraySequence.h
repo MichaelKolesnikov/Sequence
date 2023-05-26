@@ -1,10 +1,10 @@
 #pragma once
-#include "Sequence.h"
+#include "ISequence.h"
 #include "DynamicArray.h"
 #include "IIterator.h"
 
 template <class T>
-class ArraySequence : public Sequence<T> {
+class ArraySequence : public ISequence<T> {
 private:
 	DynamicArray<T>* dynamicArray;
 public:
@@ -175,10 +175,10 @@ public:
 	ArraySequence(const DynamicArray<T>& arr) {
 		this->dynamicArray = new DynamicArray<T>(arr);
 	}
-	ArraySequence(const ArraySequence<T>& other) : Sequence<T>(other) {
+	ArraySequence(const ArraySequence<T>& other) : ISequence<T>(other) {
 		this->dynamicArray = new DynamicArray<T>(*other.dynamicArray);
 	}
-	ArraySequence(Sequence<T>* sequence) {
+	ArraySequence(ISequence<T>* sequence) {
 		this->dynamicArray = new DynamicArray<T>(sequence->get_length());
 		IIterator<T>* it = sequence->Ibegin();
 		for (auto it_ = this->dynamicArray->begin(); it_ != this->dynamicArray->end(); ++it_) {
@@ -187,10 +187,10 @@ public:
 		}
 	}
 
-	Sequence<T>* create() const override {
+	ISequence<T>* create() const override {
 		return new ArraySequence<T>();
 	}
-	Sequence<T>* copy() const override {
+	ISequence<T>* copy() const override {
 		return new ArraySequence<T>(*(this->dynamicArray));
 	}
 

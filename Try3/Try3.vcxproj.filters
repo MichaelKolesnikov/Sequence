@@ -16,36 +16,24 @@
     <Filter Include="Sequence">
       <UniqueIdentifier>{0263d266-4770-4d4b-9520-52922f79cf8e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Tree">
+      <UniqueIdentifier>{f3245d67-da33-4d0d-af65-63513dcda28e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main">
+      <UniqueIdentifier>{a2fd93cb-651c-4365-a5c9-3cb33893dc7d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="IIterators">
+      <UniqueIdentifier>{f289de49-c7ad-4ffb-81e9-8f8b306cd6c6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Collection">
+      <UniqueIdentifier>{38cbf218-1093-413e-bd58-fbd68839d938}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DataTypes">
+      <UniqueIdentifier>{bc835672-4b05-4ac9-8029-c69562e4aa45}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Try3.cpp">
-      <Filter>Исходные файлы</Filter>
-    </ClCompile>
-    <ClCompile Include="DynamicArray.cpp">
-      <Filter>Исходные файлы</Filter>
-    </ClCompile>
-    <ClCompile Include="LinkedList.cpp">
-      <Filter>Исходные файлы</Filter>
-    </ClCompile>
     <ClCompile Include="IndexOutOfRange.cpp">
-      <Filter>Исходные файлы</Filter>
-    </ClCompile>
-    <ClCompile Include="Option.cpp">
-      <Filter>Исходные файлы</Filter>
-    </ClCompile>
-    <ClCompile Include="ICollection.cpp">
-      <Filter>Исходные файлы</Filter>
-    </ClCompile>
-    <ClCompile Include="IIterator.cpp">
-      <Filter>Исходные файлы</Filter>
-    </ClCompile>
-    <ClCompile Include="Person.cpp">
-      <Filter>Исходные файлы</Filter>
-    </ClCompile>
-    <ClCompile Include="Student.cpp">
-      <Filter>Исходные файлы</Filter>
-    </ClCompile>
-    <ClCompile Include="Educator.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="Vector.cpp">
@@ -63,42 +51,54 @@
     <ClCompile Include="LinkedListSequence.cpp">
       <Filter>Sequence</Filter>
     </ClCompile>
-    <ClCompile Include="Sequence.cpp">
+    <ClCompile Include="ISequence.cpp">
       <Filter>Sequence</Filter>
     </ClCompile>
+    <ClCompile Include="ITree.cpp">
+      <Filter>Tree</Filter>
+    </ClCompile>
     <ClCompile Include="BinaryTree.cpp">
-      <Filter>Исходные файлы</Filter>
+      <Filter>Tree</Filter>
+    </ClCompile>
+    <ClCompile Include="NAryTree.cpp">
+      <Filter>Tree</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="IIterator.cpp">
+      <Filter>IIterators</Filter>
+    </ClCompile>
+    <ClCompile Include="IConstIterator.cpp">
+      <Filter>IIterators</Filter>
+    </ClCompile>
+    <ClCompile Include="ICollection.cpp">
+      <Filter>Collection</Filter>
+    </ClCompile>
+    <ClCompile Include="LinkedList.cpp">
+      <Filter>Collection</Filter>
+    </ClCompile>
+    <ClCompile Include="DynamicArray.cpp">
+      <Filter>Collection</Filter>
+    </ClCompile>
+    <ClCompile Include="Option.cpp">
+      <Filter>DataTypes</Filter>
+    </ClCompile>
+    <ClCompile Include="Educator.cpp">
+      <Filter>DataTypes</Filter>
+    </ClCompile>
+    <ClCompile Include="Person.cpp">
+      <Filter>DataTypes</Filter>
+    </ClCompile>
+    <ClCompile Include="Student.cpp">
+      <Filter>DataTypes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DynamicArray.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
-    <ClInclude Include="LinkedList.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
     <ClInclude Include="IndexOutOfRange.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="resource.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
-    <ClInclude Include="Option.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
-    <ClInclude Include="ICollection.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
-    <ClInclude Include="IIterator.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
-    <ClInclude Include="Person.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
-    <ClInclude Include="Student.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
-    <ClInclude Include="Educator.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="Vector.h">
@@ -116,7 +116,7 @@
     <ClInclude Include="HanoiTowers.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="Sequence.h">
+    <ClInclude Include="ISequence.h">
       <Filter>Sequence</Filter>
     </ClInclude>
     <ClInclude Include="ArraySequence.h">
@@ -125,13 +125,49 @@
     <ClInclude Include="LinkedListSequence.h">
       <Filter>Sequence</Filter>
     </ClInclude>
+    <ClInclude Include="ITree.h">
+      <Filter>Tree</Filter>
+    </ClInclude>
     <ClInclude Include="BinaryTree.h">
-      <Filter>Файлы заголовков</Filter>
+      <Filter>Tree</Filter>
+    </ClInclude>
+    <ClInclude Include="NAryTree.h">
+      <Filter>Tree</Filter>
+    </ClInclude>
+    <ClInclude Include="IIterator.h">
+      <Filter>IIterators</Filter>
+    </ClInclude>
+    <ClInclude Include="IConstIterator.h">
+      <Filter>IIterators</Filter>
+    </ClInclude>
+    <ClInclude Include="ICollection.h">
+      <Filter>Collection</Filter>
+    </ClInclude>
+    <ClInclude Include="DynamicArray.h">
+      <Filter>Collection</Filter>
+    </ClInclude>
+    <ClInclude Include="LinkedList.h">
+      <Filter>Collection</Filter>
+    </ClInclude>
+    <ClInclude Include="Educator.h">
+      <Filter>DataTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="Option.h">
+      <Filter>DataTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="Person.h">
+      <Filter>DataTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="Student.h">
+      <Filter>DataTypes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Try3.rc">
       <Filter>Файлы ресурсов</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>

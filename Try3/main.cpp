@@ -9,7 +9,7 @@
 using namespace std;
 
 template <class T>
-void process_sequence(Sequence<T>& sequence, bool(*f_find)(T x), T(*f_reduce)(T a, T b), T(*f_map)(T x)) {
+void process_sequence(ISequence<T>* sequence, bool(*f_find)(T x), T(*f_reduce)(T a, T b), T(*f_map)(T x)) {
 	// couts of possible actions
 	{
 		cout << "Select the operation to be performed on the sequence" << endl;
@@ -33,13 +33,13 @@ void process_sequence(Sequence<T>& sequence, bool(*f_find)(T x), T(*f_reduce)(T 
 		cin >> operation;
 
 		if (operation == "1") {
-			cout << sequence.get_length() << endl;
+			cout << sequence->get_length() << endl;
 		}
 		else if (operation == "2") {
 			cout << "enter an index" << endl;
 			int index;
 			cin >> index;
-			Option<T> option = sequence.try_get(index);
+			Option<T> option = sequence->try_get(index);
 			if (option.has_value()) {
 				cout << option.value() << endl;
 			}
@@ -51,18 +51,18 @@ void process_sequence(Sequence<T>& sequence, bool(*f_find)(T x), T(*f_reduce)(T 
 			cout << "Enter the left and right index" << endl;
 			int l, r;
 			cin >> l >> r;
-			if (!(0 <= l && l <= r && r <= sequence.get_length())) {
+			if (!(0 <= l && l <= r && r <= sequence->get_length())) {
 				cout << "You entered the wrong indexes" << endl;
 				continue;
 			}
-			Sequence<T>& sub = sequence.get_sub_sequence(l, r);
+			ISequence<T>& sub = sequence->get_sub_sequence(l, r);
 			cout << sub;
 			cout << "Do you want to keep the cropped version? (then the old one will be lost) y/n" << endl;
 			string choice;
 			cin >> choice;
 			if (choice == "y") {
-				delete &sequence;
-				sequence = sub;
+				delete sequence;
+				*sequence = sub;
 			}
 			else {
 				delete &sub;
@@ -72,26 +72,26 @@ void process_sequence(Sequence<T>& sequence, bool(*f_find)(T x), T(*f_reduce)(T 
 			T value;
 			cout << "Enter a value" << endl;
 			cin >> value;
-			sequence.append(value);
+			sequence->append(value);
 		}
 		else if (operation == "5") {
 			T value;
 			cout << "Enter a value" << endl;
 			cin >> value;
-			sequence.prepend(value);
+			sequence->prepend(value);
 		}
 		else if (operation == "6") {
 			int index;
 			cout << "Enter an index" << endl;
 			cin >> index;
-			if (!(0 <= index && index <= sequence.get_length())) {
+			if (!(0 <= index && index <= sequence->get_length())) {
 				cout << "You entered the wrong indexes" << endl;
 				continue;
 			}
 			T value;
 			cout << "Enter a value" << endl;
 			cin >> value;
-			sequence.insert_at(value, index);
+			sequence->insert_at(value, index);
 		}
 		else if (operation == "7") {
 			int n;
@@ -112,21 +112,21 @@ void process_sequence(Sequence<T>& sequence, bool(*f_find)(T x), T(*f_reduce)(T 
 					break;
 				}
 			}
-			Sequence<T>& added = *(new ArraySequence<T>(data, n));
-			Sequence<T>& concated = sequence.concat(added);
-			delete &sequence;
+			ISequence<T>& added = *(new ArraySequence<T>(data, n));
+			ISequence<T>& concated = sequence->concat(added);
+			delete sequence;
 			delete &added;
-			sequence = concated;
+			sequence = &concated;
 		}
 		else if (operation == "8") {
-			Sequence<T>& whered = sequence.find(f_find);
+			ISequence<T>& whered = sequence->find(f_find);
 			cout << whered;
 			cout << "Do you want to keep the cropped version? (then the old one will be lost) y/n" << endl;
 			string choice;
 			cin >> choice;
 			if (choice == "y") {
-				delete &sequence;
-				sequence = whered;
+				delete sequence;
+				sequence = &whered;
 			}
 			else {
 				delete &whered;
@@ -136,25 +136,25 @@ void process_sequence(Sequence<T>& sequence, bool(*f_find)(T x), T(*f_reduce)(T 
 			T value;
 			cout << "Enter base value" << endl;
 			cin >> value;
-			cout << sequence.reduce(f_reduce, value) << endl;
+			cout << sequence->reduce(f_reduce, value) << endl;
 		}
 		else if (operation == "10") {
-			delete &sequence;
+			delete sequence;
 			cout << "You have finished the session.\nYou can start a new one" << endl;
 			working = false;
 		}
 		else if (operation == "11") {
-			cout << sequence;
+			cout << *sequence;
 		}
 		else if (operation == "12") {
-			Sequence<T>& mapped = map_sequence<T, ArraySequence<T>, T>(f_map, sequence);
+			ISequence<T>& mapped = map_sequence<T, ArraySequence<T>, T>(f_map, *sequence);
 			cout << mapped;
 			cout << "Do you want to keep this version? (then the old one will be lost) y/n" << endl;
 			string choice;
 			cin >> choice;
 			if (choice == "y") {
-				delete &sequence;
-				sequence = mapped;
+				delete sequence;
+				sequence = &mapped;
 			}
 			else {
 				delete &mapped;
@@ -236,18 +236,18 @@ void call_interface() {
 		switch (type[0])
 		{
 		case '1': {
-			Sequence<int>& sequence = *(new ArraySequence<int>());
-			process_sequence(sequence, f_find, f_reduce, f_map);
+			ISequence<int>& sequence = *(new ArraySequence<int>());
+			process_sequence(&sequence, f_find, f_reduce, f_map);
 			break;
 		}
 		case '2': {
-			Sequence<double>& sequence = *(new ArraySequence<double>());
-			process_sequence(sequence, f_find, f_reduce, f_map);
+			ISequence<double>& sequence = *(new ArraySequence<double>());
+			process_sequence(&sequence, f_find, f_reduce, f_map);
 			break;
 		}
 		case '3': {
-			Sequence<char>& sequence = *(new ArraySequence<char>());
-			process_sequence(sequence, f_find, f_reduce, f_map);
+			ISequence<char>& sequence = *(new ArraySequence<char>());
+			process_sequence(&sequence, f_find, f_reduce, f_map);
 			break;
 		}
 		case '4': {
@@ -280,8 +280,5 @@ void call_interface() {
 }
 
 int main() {
-	int n = 5;
-	int* data = new int[] { 0, 1, 2, 3, 4 };
-	Sequence<int>& seq = *(new ArraySequence<int>(data, n));
-	cout << seq;
+	
 }

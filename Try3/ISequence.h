@@ -3,22 +3,23 @@
 #include <ostream>
 #include "ICollection.h"
 #include "IIterator.h"
+#include "IConstIterator.h"
 
 template <class T>
-class Sequence : public ICollection<T> {
+class ISequence : public ICollection<T> {
 public:
 	virtual IConstIterator<T>* Icbegin() const = 0;
 	virtual IConstIterator<T>* Icend() const = 0;
 	virtual IIterator<T>* Ibegin() = 0;
 	virtual IIterator<T>* Iend() = 0;
 
-	Sequence() = default;
-	Sequence(size_t length) {}
-	Sequence(T* items, size_t length) {}
-	Sequence(const Sequence<T>& other) = default;
-	~Sequence() = default;
-	virtual Sequence<T>* create() const = 0;
-	virtual Sequence<T>* copy() const = 0;
+	ISequence() = default;
+	ISequence(size_t length) {}
+	ISequence(T* items, size_t length) {}
+	ISequence(const ISequence<T>& other) = default;
+	~ISequence() = default;
+	virtual ISequence<T>* create() const = 0;
+	virtual ISequence<T>* copy() const = 0;
 
 	virtual size_t get_length() const override = 0;
 
@@ -30,8 +31,8 @@ public:
 	virtual T get_first() const = 0;
 	virtual T get_last() const = 0;
 
-	Sequence<T>& get_sub_sequence(int startIndex, int endIndex) const {
-		Sequence<T>& sub = *(this->create());
+	ISequence<T>& get_sub_sequence(int startIndex, int endIndex) const {
+		ISequence<T>& sub = *(this->create());
 		IConstIterator<T>* it = this->Icbegin();
 		int i = 0;
 		for (; i < startIndex; ++i) {
@@ -49,16 +50,16 @@ public:
 
 	virtual T pop() = 0;
 
-	Sequence <T>& concat(const Sequence <T>& const otherSequence) const {
-		Sequence<T>& concated = *(this->copy());
+	ISequence<T>& concat(const ISequence <T>& const otherSequence) const {
+		ISequence<T>& concated = *(this->copy());
 		for (IConstIterator<T>* it = otherSequence.Icbegin(); !(it->is_equal(otherSequence.Icend())); it->next()) {
 			concated.append(it->get());
 		}
 		return concated;
 	}
 
-	Sequence<T>& find(bool (*f)(T)) const {
-        Sequence<T>& result = *(this->create());
+	ISequence<T>& find(bool (*f)(T)) const {
+        ISequence<T>& result = *(this->create());
         for (IConstIterator<T>* it = this->Icbegin(); !(it->is_equal(this->Icend())); it->next()) {
             if (f(it->get())) {
 				result.append(it->get());
@@ -75,7 +76,7 @@ public:
         return base;
     }
 
-	friend std::ostream& operator<< (std::ostream& stream, const Sequence<T>& sequence) {
+	friend std::ostream& operator<< (std::ostream& stream, const ISequence<T>& sequence) {
 		stream << std::endl << "[";
 		IConstIterator<T>* it = sequence.Icbegin();
 		for (; !(it->is_equal(sequence.Icend())); it->next()) {
@@ -88,9 +89,9 @@ public:
 };
 
 template <class output_type, class sequence_output_type, class input_type>
-typename std::enable_if<std::is_base_of<Sequence<output_type>, sequence_output_type>::value, Sequence<output_type>&>::type
-map_sequence(output_type(*f)(input_type), const Sequence<input_type>& sequence) {
-	Sequence<output_type>& result = *(new sequence_output_type());
+typename std::enable_if<std::is_base_of<ISequence<output_type>, sequence_output_type>::value, ISequence<output_type>&>::type
+map_sequence(output_type(*f)(input_type), const ISequence<input_type>& sequence) {
+	ISequence<output_type>& result = *(new sequence_output_type());
 	for (IConstIterator<input_type>* it = sequence.Icbegin(); !(it->is_equal(sequence.Icend())); it->next()) {
 		result.append(f(it->get()));
 	}

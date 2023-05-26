@@ -5,22 +5,24 @@
 template <class T>
 class BinaryTree {
 private:
-	class TreeNode {
+	class Node {
 	public:
 		T value;
-		BinaryTree<T>::TreeNode* left;
-		BinaryTree<T>::TreeNode* right;
+		BinaryTree<T>::Node* left;
+		BinaryTree<T>::Node* right;
 
-		explicit TreeNode(T value) : value(value), left(nullptr), right(nullptr) {}
-		TreeNode(T value, BinaryTree<T>::TreeNode* left, BinaryTree<T>::TreeNode* right) : value(value), left(left), right(right) {}
+		explicit Node(T value) : value(value), left(nullptr), right(nullptr) {}
+		Node(T value, BinaryTree<T>::Node* left, BinaryTree<T>::Node* right) : value(value), left(left), right(right) {}
 	};
 
-	TreeNode* root;
+	Node* root;
 public:
 	BinaryTree() {}
-	/*explicit BinaryTree(const Sequence<T>* const sequence) {
-		for (IConstIterator<T> it = *)
-	}*/
+	explicit BinaryTree(const Sequence<T>& sequence) {
+		/*for (IConstIterator<T>* it = sequence.Icbegin(); !(it->is_equal(sequence.Icend())); it->next()) {
+
+		}*/
+	}
 
 };
 

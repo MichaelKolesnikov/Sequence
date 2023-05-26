@@ -1,9 +1,9 @@
 #pragma once
-#include "Sequence.h"
+#include "ISequence.h"
 #include "LinkedList.h"
 
 template <class T>
-class LinkedListSequence : public Sequence<T> {
+class LinkedListSequence : public ISequence<T> {
 private:
 	LinkedList<T>* linked_list;
 public:
@@ -176,10 +176,10 @@ public:
 	LinkedListSequence(const LinkedList<T>& list) {
 		this->linked_list = new LinkedList<T>(list);
 	}
-	LinkedListSequence(const LinkedListSequence<T>& other) : Sequence<T>(other) {
+	LinkedListSequence(const LinkedListSequence<T>& other) : ISequence<T>(other) {
 		this->linked_list = new LinkedList<T>(*other.linked_list);
 	}
-	LinkedListSequence(Sequence<T>* sequence) {
+	LinkedListSequence(ISequence<T>* sequence) {
 		this->linked_list = new LinkedList<T>(sequence->get_length());
 		IIterator<T>* it = sequence->Ibegin();
 		for (auto it_ = this->linked_list->begin(); it_ != this->linked_list->end(); ++it_) {
@@ -187,10 +187,10 @@ public:
 			it->next();
 		}
 	}
-	Sequence<T>* create() const {
+	ISequence<T>* create() const {
 		return new LinkedListSequence<T>();
 	}
-	Sequence<T>* copy() const {
+	ISequence<T>* copy() const {
 		return new LinkedListSequence<T>(*this);
 	}
 

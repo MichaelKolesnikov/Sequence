@@ -9,17 +9,17 @@
 
 using namespace std;
 
-TEST(Sequence, ArraySequence) {
-	Sequence<float>* s1 = new ArraySequence<float>();
-	Sequence<double>* s2 = new ArraySequence<double>(5);
+TEST(ISequence, ArraySequence) {
+	ISequence<float>* s1 = new ArraySequence<float>();
+	ISequence<double>* s2 = new ArraySequence<double>(5);
 	int* data = new int[]{ 0, 1, 2, 3, 4 };
-	Sequence<int>* s3 = new ArraySequence<int>(data, 5);
+	ISequence<int>* s3 = new ArraySequence<int>(data, 5);
 	for (int i = 0; i < 5; ++i) {
 		EXPECT_EQ(data[i], s3->get(i));
 	}
 	char* d = new char[] {'a', 'b', 'c'};
-	Sequence<char>* s4 = new ArraySequence<char>(d, 3);
-	Sequence<char>* s5 = new ArraySequence<char>(s4);
+	ISequence<char>* s4 = new ArraySequence<char>(d, 3);
+	ISequence<char>* s5 = new ArraySequence<char>(s4);
 	for (int i = 0; i < 3; ++i) {
 		EXPECT_EQ(s4->get(i), s5->get(i));
 	}
@@ -33,16 +33,16 @@ TEST(Sequence, ArraySequence) {
 }
 
 TEST(Sequence, LinkedListSequence) {
-	Sequence<float>* s1 = new LinkedListSequence<float>();
-	Sequence<double>* s2 = new LinkedListSequence<double>(5);
+	ISequence<float>* s1 = new LinkedListSequence<float>();
+	ISequence<double>* s2 = new LinkedListSequence<double>(5);
 	int* data = new int[] { 0, 1, 2, 3, 4 };
-	Sequence<int>* s3 = new LinkedListSequence<int>(data, 5);
+	ISequence<int>* s3 = new LinkedListSequence<int>(data, 5);
 	for (int i = 0; i < 5; ++i) {
 		EXPECT_EQ(data[i], s3->get(i));
 	}
 	char* d = new char[] {'a', 'b', 'c'};
-	Sequence<char>* s4 = new LinkedListSequence<char>(d, 3);
-	Sequence<char>* s5 = new LinkedListSequence<char>(s4);
+	ISequence<char>* s4 = new LinkedListSequence<char>(d, 3);
+	ISequence<char>* s5 = new LinkedListSequence<char>(s4);
 	for (int i = 0; i < 3; ++i) {
 		EXPECT_EQ(s4->get(i), s5->get(i));
 	}
@@ -56,11 +56,11 @@ TEST(Sequence, LinkedListSequence) {
 }
 
 TEST(Sequence, get_sub_sequence) {
-	Sequence<int>& s1 = *(new ArraySequence<int>(new int[] {1, 2, 3, 4, 5, 6}, 6));
+	ISequence<int>& s1 = *(new ArraySequence<int>(new int[] {1, 2, 3, 4, 5, 6}, 6));
 	int left, right;
 
 	left = 0, right = 1;
-	Sequence<int>* sub = &s1.get_sub_sequence(left, right);
+	ISequence<int>* sub = &s1.get_sub_sequence(left, right);
 	EXPECT_EQ(sub->get_length(), 1);
 	EXPECT_EQ(sub->get(0), s1.get(0));
 	delete sub;
@@ -90,11 +90,11 @@ TEST(Sequence, get_sub_sequence) {
 }
 
 TEST(Sequence, concat) {
-	Sequence<int>& s1 = *(new LinkedListSequence<int>(new int[] {4, 8, 0, 1, 2, 3}, 6));
-	Sequence<int>& s2 = *(new ArraySequence<int>(new int[] {6, 9, 0, 1, 4, 2, 3, 7}, 8));
-	Sequence<int>& concated = s1.concat(s2);
+	ISequence<int>& s1 = *(new LinkedListSequence<int>(new int[] {4, 8, 0, 1, 2, 3}, 6));
+	ISequence<int>& s2 = *(new ArraySequence<int>(new int[] {6, 9, 0, 1, 4, 2, 3, 7}, 8));
+	ISequence<int>& concated = s1.concat(s2);
 	int i = 0;
-	Sequence<int>* cur_seq = &s1;
+	ISequence<int>* cur_seq = &s1;
 	for (IConstIterator<int>* it = concated.Icbegin(); !(it->is_equal(concated.Icend())); it->next()) {
 		EXPECT_EQ(it->get(), cur_seq->get(i));
 		++i;
@@ -109,9 +109,9 @@ TEST(Sequence, concat) {
 }
 
 TEST(Sequence, find) {
-	Sequence<int>& s1 = *(new LinkedListSequence<int>(new int[] {5, 9, 0, 1, 2}, 5));
+	ISequence<int>& s1 = *(new LinkedListSequence<int>(new int[] {5, 9, 0, 1, 2}, 5));
 	auto f = [](int x) {return x % 2 == 0;};
-	Sequence<int>& whered = s1.find(f);
+	ISequence<int>& whered = s1.find(f);
 	IIterator<int>* it1 = whered.Ibegin();
 	for (IConstIterator<int>* it = s1.Icbegin(); !(it->is_equal(s1.Icend())) && !(whered.Iend()); it->next()) {
 		if (f(it->get())) {
@@ -127,7 +127,7 @@ TEST(Sequence, find) {
 }
 
 TEST(Sequence, reduce) {
-	Sequence<int>* s1 = new ArraySequence<int>(new int[] {4, 6, 1, 7}, 4);
+	ISequence<int>* s1 = new ArraySequence<int>(new int[] {4, 6, 1, 7}, 4);
 	int base = 100;
 	auto f = [](int x, int y) {return x + y;};
 	auto val = s1->reduce(f, base);
@@ -140,8 +140,8 @@ TEST(Sequence, reduce) {
 }
 
 TEST(Sequence, map_sequence) {
-	Sequence<int>& s1 = *(new LinkedListSequence<int>(new int[] {3, 6, 9, 1, 2}, 5));
-	Sequence<double>& mapped = map_sequence<double, ArraySequence<double>, int>([](int x) {return (double)x / 2;}, s1);
+	ISequence<int>& s1 = *(new LinkedListSequence<int>(new int[] {3, 6, 9, 1, 2}, 5));
+	ISequence<double>& mapped = map_sequence<double, ArraySequence<double>, int>([](int x) {return (double)x / 2;}, s1);
 	auto it = mapped.Ibegin();
 	for (auto it1 = s1.Ibegin(); !(it->is_equal(mapped.Iend())); it->next(), it1->next()) {
 		EXPECT_EQ(it->get(), (double)it1->get() / 2);

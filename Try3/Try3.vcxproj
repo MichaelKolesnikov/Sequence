@@ -144,17 +144,20 @@
     <ClCompile Include="DynamicArray.cpp" />
     <ClCompile Include="Educator.cpp" />
     <ClCompile Include="ICollection.cpp" />
+    <ClCompile Include="IConstIterator.cpp" />
     <ClCompile Include="IIterator.cpp" />
     <ClCompile Include="IndexOutOfRange.cpp" />
+    <ClCompile Include="ITree.cpp" />
     <ClCompile Include="LinkedList.cpp" />
     <ClCompile Include="LinkedListSequence.cpp" />
+    <ClCompile Include="NAryTree.cpp" />
     <ClCompile Include="Option.cpp" />
     <ClCompile Include="PermutationGenerator.cpp" />
     <ClCompile Include="Person.cpp" />
-    <ClCompile Include="Sequence.cpp" />
+    <ClCompile Include="ISequence.cpp" />
     <ClCompile Include="Stack.cpp" />
     <ClCompile Include="Student.cpp" />
-    <ClCompile Include="Try3.cpp" />
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="Vector.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -163,6 +166,9 @@
     <ClInclude Include="DynamicArray.h" />
     <ClInclude Include="Educator.h" />
     <ClInclude Include="HanoiTowers.h" />
+    <ClInclude Include="IConstIterator.h" />
+    <ClInclude Include="ITree.h" />
+    <ClInclude Include="NAryTree.h" />
     <ClInclude Include="NumberTheory.h" />
     <ClInclude Include="ICollection.h" />
     <ClInclude Include="IIterator.h" />
@@ -173,13 +179,16 @@
     <ClInclude Include="PermutationGenerator.h" />
     <ClInclude Include="Person.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="Sequence.h" />
+    <ClInclude Include="ISequence.h" />
     <ClInclude Include="Stack.h" />
     <ClInclude Include="Student.h" />
     <ClInclude Include="Vector.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Try3.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
