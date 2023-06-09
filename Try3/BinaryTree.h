@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Sequence.h"
+#include "ISequence.h"
 
 template <class T>
 class BinaryTree {
@@ -18,7 +18,7 @@ private:
 	Node* root;
 public:
 	BinaryTree() {}
-	explicit BinaryTree(const Sequence<T>& sequence) {
+	explicit BinaryTree(const ISequence<T>& sequence) {
 		/*for (IConstIterator<T>* it = sequence.Icbegin(); !(it->is_equal(sequence.Icend())); it->next()) {
 
 		}*/
